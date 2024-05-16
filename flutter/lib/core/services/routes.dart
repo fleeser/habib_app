@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 
+import 'package:habib_app/core/common/widgets/hb_dialog.dart';
 import 'package:habib_app/core/error/error_page.dart';
 import 'package:habib_app/src/features/books/presentation/pages/book_details_page.dart';
 import 'package:habib_app/src/features/books/presentation/pages/books_page.dart';
+import 'package:habib_app/src/features/books/presentation/pages/create_book_page.dart';
+import 'package:habib_app/src/features/borrows/presentation/pages/borrow_details_page.dart';
+import 'package:habib_app/src/features/borrows/presentation/pages/borrows_page.dart';
+import 'package:habib_app/src/features/borrows/presentation/pages/create_borrow_page.dart';
+import 'package:habib_app/src/features/customers/presentation/pages/create_customer_page.dart';
 import 'package:habib_app/src/features/customers/presentation/pages/customer_details_page.dart';
 import 'package:habib_app/src/features/customers/presentation/pages/customers_page.dart';
 import 'package:habib_app/src/features/home/presentation/pages/home_page.dart';
-import 'package:habib_app/src/features/reminders/presentation/pages/reminders_page.dart';
 import 'package:habib_app/src/features/settings/presentation/pages/settings_page.dart';
 import 'package:habib_app/src/main_page.dart';
 
@@ -47,8 +52,8 @@ class SplashRoute extends GoRouteData {
     TypedGoRoute<HomeRoute>(path: HomeRoute.location),
     TypedGoRoute<CustomersRoute>(path: CustomersRoute.location),
     TypedGoRoute<BooksRoute>(path: BooksRoute.location),
-    TypedGoRoute<RemindersRoute>(path: RemindersRoute.location),
-    TypedGoRoute<SettingsRoute>(path: SettingsRoute.location),
+    TypedGoRoute<BorrowsRoute>(path: BorrowsRoute.location),
+    TypedGoRoute<SettingsRoute>(path: SettingsRoute.location)
   ]
 )
 class MainRoute extends ShellRouteData {
@@ -95,6 +100,23 @@ class CustomersRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<CreateCustomerRoute>(path: CreateCustomerRoute.location)
+class CreateCustomerRoute extends GoRouteData {
+
+  const CreateCustomerRoute();
+
+  static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
+
+  static const String location = '/customers/new';
+
+  @override
+  Page<int> buildPage(BuildContext context, GoRouterState state) {
+    return HBDialogPage<int>(
+      builder: (BuildContext context) => const CreateCustomerPage()
+    );
+  }
+}
+
 @TypedGoRoute<CustomerDetailsRoute>(path: CustomerDetailsRoute.location)
 class CustomerDetailsRoute extends GoRouteData {
 
@@ -132,6 +154,23 @@ class BooksRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<CreateBookRoute>(path: CreateBookRoute.location)
+class CreateBookRoute extends GoRouteData {
+
+  const CreateBookRoute();
+
+  static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
+
+  static const String location = '/books/new';
+
+  @override
+  Page<int> buildPage(BuildContext context, GoRouterState state) {
+    return HBDialogPage<int>(
+      builder: (BuildContext context) => const CreateBookPage()
+    );
+  }
+}
+
 @TypedGoRoute<BookDetailsRoute>(path: BookDetailsRoute.location)
 class BookDetailsRoute extends GoRouteData {
 
@@ -152,20 +191,57 @@ class BookDetailsRoute extends GoRouteData {
   }
 }
 
-class RemindersRoute extends GoRouteData {
+class BorrowsRoute extends GoRouteData {
 
-  const RemindersRoute();
+  const BorrowsRoute();
 
   static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
 
-  static const String location = '/reminders';
+  static const String location = '/borrows';
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return NoTransitionPage(
       key: state.pageKey,
-      child: const RemindersPage()
+      child: const BorrowsPage()
     );
+  }
+}
+
+@TypedGoRoute<CreateBorrowRoute>(path: CreateBorrowRoute.location)
+class CreateBorrowRoute extends GoRouteData {
+
+  const CreateBorrowRoute();
+
+  static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
+
+  static const String location = '/borrows/new';
+
+  @override
+  Page<int> buildPage(BuildContext context, GoRouterState state) {
+    return HBDialogPage<int>(
+      builder: (BuildContext context) => const CreateBorrowPage()
+    );
+  }
+}
+
+@TypedGoRoute<BorrowDetailsRoute>(path: BorrowDetailsRoute.location)
+class BorrowDetailsRoute extends GoRouteData {
+
+  final int borrowId;
+
+  const BorrowDetailsRoute({
+    required this.borrowId
+  });
+
+  static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
+
+  static const String location = '/borrows/:borrowId';
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    final BorrowDetailsPageParams params = BorrowDetailsPageParams(borrowId: borrowId);
+    return BorrowDetailsPage(params: params);
   }
 }
 

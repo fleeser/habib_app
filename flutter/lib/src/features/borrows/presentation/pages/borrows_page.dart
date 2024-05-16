@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:habib_app/core/common/widgets/hb_table.dart';
 import 'package:habib_app/core/extensions/exception_extension.dart';
+import 'package:habib_app/core/utils/enums/toast_type.dart';
 import 'package:habib_app/core/common/widgets/hb_app_bar.dart';
 import 'package:habib_app/core/common/widgets/hb_button.dart';
 import 'package:habib_app/core/common/widgets/hb_gap.dart';
@@ -15,23 +16,22 @@ import 'package:habib_app/core/res/theme/spacing/hb_spacing.dart';
 import 'package:habib_app/core/services/routes.dart';
 import 'package:habib_app/core/utils/constants/hb_ui_constants.dart';
 import 'package:habib_app/core/utils/core_utils.dart';
-import 'package:habib_app/core/utils/enums/toast_type.dart';
-import 'package:habib_app/src/features/customers/domain/entities/customer_entity.dart';
-import 'package:habib_app/src/features/customers/presentation/app/customers_page_notifier.dart';
+import 'package:habib_app/src/features/borrows/domain/entities/borrow_entity.dart';
+import 'package:habib_app/src/features/borrows/presentation/app/borrows_page_notifier.dart';
 
-class CustomersPage extends ConsumerStatefulWidget {
+class BorrowsPage extends ConsumerStatefulWidget {
 
-  const CustomersPage({ super.key });
+  const BorrowsPage({ super.key });
 
   @override
-  ConsumerState<CustomersPage> createState() => _CustomersPageState();
+  ConsumerState<BorrowsPage> createState() => _BorrowsPageState();
 }
 
-class _CustomersPageState extends ConsumerState<CustomersPage> {
+class _BorrowsPageState extends ConsumerState<BorrowsPage> {
 
   final ScrollController _scrollController = ScrollController();
 
-  void _onPageStateUpdate(CustomersPageState? _, CustomersPageState next) {
+  void _onPageStateUpdate(BorrowsPageState? _, BorrowsPageState next) {
     if (next.exception != null) {
       CoreUtils.showToast(
         context, 
@@ -51,30 +51,30 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
 
   void _onScroll() {
     if (_isBottom) {
-      ref.read(customersPageNotifierProvider.notifier).fetchNextPage();
+      ref.read(borrowsPageNotifierProvider.notifier).fetchNextPage();
     }
   }
 
   HBTableStatus get _tableStatus {
-    final CustomersPageState pageState = ref.read(customersPageNotifierProvider);
-    if (pageState.status == CustomersPageStatus.success && pageState.customers.isNotEmpty) return HBTableStatus.data;
-    if (pageState.status == CustomersPageStatus.failure || (pageState.status == CustomersPageStatus.success && pageState.customers.isEmpty)) return HBTableStatus.text;
+    final BorrowsPageState pageState = ref.read(borrowsPageNotifierProvider);
+    if (pageState.status == BorrowsPageStatus.success && pageState.borrows.isNotEmpty) return HBTableStatus.data;
+    if (pageState.status == BorrowsPageStatus.failure || (pageState.status == BorrowsPageStatus.success && pageState.borrows.isEmpty)) return HBTableStatus.text;
     return HBTableStatus.loading;
   }
 
   String? get _tableText {
-    final CustomersPageState pageState = ref.read(customersPageNotifierProvider);
-    if (pageState.status == CustomersPageStatus.success && pageState.customers.isEmpty) return 'Keine Kunden gefunden.';
-    if (pageState.status == CustomersPageStatus.failure) return 'Ein Fehler ist aufgetreten.';
+    final BorrowsPageState pageState = ref.read(borrowsPageNotifierProvider);
+    if (pageState.status == BorrowsPageStatus.success && pageState.borrows.isEmpty) return 'Keine Ausleihen gefunden.';
+    if (pageState.status == BorrowsPageStatus.failure) return 'Ein Fehler ist aufgetreten.';
     return null;
   }
 
-  Future<void> _onCustomerPressed(int customerId) async {
-    await CustomerDetailsRoute(customerId: customerId).push(context);
+  Future<void> _onBorrowPressed(int borrowId) async {
+    await BorrowDetailsRoute(borrowId: borrowId).push(context);
   }
 
-  Future<void> _onCreateCustomer() async {
-    await const CreateCustomerRoute().push(context);
+  Future<void> _onCreateBorrow() async {
+    await const CreateBorrowRoute().push(context);
   }
 
   @override
@@ -84,7 +84,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
     _scrollController.addListener(_onScroll);
 
     CoreUtils.postFrameCall(() {
-      ref.read(customersPageNotifierProvider.notifier).fetchNextPage();
+      ref.read(borrowsPageNotifierProvider.notifier).fetchNextPage();
     });
   }
 
@@ -100,17 +100,17 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
   @override
   Widget build(BuildContext context) {
 
-    final CustomersPageState pageState = ref.watch(customersPageNotifierProvider);
+    final BorrowsPageState pageState = ref.watch(borrowsPageNotifierProvider);
 
-    ref.listen<CustomersPageState>(
-      customersPageNotifierProvider,
+    ref.listen<BorrowsPageState>(
+      borrowsPageNotifierProvider,
       _onPageStateUpdate
     );
 
     return HBScaffold(
       appBar: HBAppBar(
         context: context, 
-        title: 'Kunden'
+        title: 'Ausleihen'
       ),
       body: Column(
         children: [
@@ -118,29 +118,28 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
             padding: EdgeInsets.only(
               left: HBSpacing.lg,
               right: context.rightPadding + HBSpacing.lg,
-              top: HBSpacing.lg,
-              bottom: HBSpacing.lg
+              top: HBSpacing.lg
             ),
             child: Row(
               children: [
                 const HBTextField(
                   icon: HBIcons.magnifyingGlass,
-                  hint: 'Name',
+                  hint: 'Buchtitel oder Kundenname',
                   maxWidth: 500.0
                 ),
                 const HBGap.lg(),
                 const Spacer(),
                 HBButton.shrinkFill(
-                  onPressed: _onCreateCustomer,
+                  onPressed: _onCreateBorrow,
                   icon: HBIcons.plus,
-                  title: 'Neue/r Kund*in'
+                  title: 'Neue Ausleihe'
                 )
               ]
             )
           ),
           Expanded(
             child: HBTable(
-              onPressed: (int index) => _onCustomerPressed(pageState.customers[index].id),
+              onPressed: (int index) => _onBorrowPressed(pageState.borrows[index].id),
               status: _tableStatus,
               padding: EdgeInsets.only(
                 left: HBSpacing.lg,
@@ -151,13 +150,14 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
               controller: _scrollController,
               tableWidth: context.width - HBUIConstants.navigationRailWidth - context.rightPadding - 4.0 * HBSpacing.lg,
               columnLength: 2,
-              fractions: const [ 0.1, 0.9 ],
-              titles: const [ 'ID', 'Name' ],
-              items: List.generate(pageState.customers.length, (int index) {
-                final CustomerEntity customer = pageState.customers[index];
+              fractions: const [ 0.1, 0.45, 0.45 ],
+              titles: const [ 'ID', 'Kundenname', 'Buchtitel' ],
+              items: List.generate(pageState.borrows.length, (int index) {
+                final BorrowEntity borrow = pageState.borrows[index];
                 return [
-                  customer.id.toString(),
-                  '${customer.firstName} ${customer.lastName}'
+                  borrow.id.toString(),
+                  '${borrow.customer?.firstName ?? 'Unbekannt'} ${borrow.customer?.lastName ?? 'Unbekannt'}',
+                  borrow.book?.title ?? 'Unbekannt'
                 ];
               }),
               text: _tableText

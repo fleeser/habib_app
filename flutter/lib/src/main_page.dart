@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
+
 import 'package:habib_app/core/common/widgets/hb_navigation_rail.dart';
 import 'package:habib_app/core/common/widgets/hb_scaffold.dart';
 import 'package:habib_app/core/res/hb_icons.dart';
@@ -22,7 +23,7 @@ class MainPage extends StatelessWidget {
       case HomeRoute.location: return 0;
       case CustomersRoute.location: return 1;
       case BooksRoute.location: return 2;
-      case RemindersRoute.location: return 3;
+      case BorrowsRoute.location: return 3;
       case SettingsRoute.location: return 4;
       default: throw Exception('Index for location not found: $location');
     }
@@ -40,7 +41,7 @@ class MainPage extends StatelessWidget {
         const BooksRoute().go(context);
         break;
       case 3:
-        const RemindersRoute().go(context);
+        const BorrowsRoute().go(context);
         break;
       case 4:
         const SettingsRoute().go(context);
@@ -71,8 +72,8 @@ class MainPage extends StatelessWidget {
                 title: 'Bücher'
               ),
               HBNavigationRailItem(
-                icon: HBIcons.exclamationCircle,
-                title: 'Erinnerungen'
+                icon: HBIcons.clock,
+                title: 'Ausleihen'
               ),
               HBNavigationRailItem(
                 icon: HBIcons.cog6Tooth,

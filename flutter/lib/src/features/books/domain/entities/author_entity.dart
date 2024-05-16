@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:habib_app/src/features/customers/domain/entities/address_entity.dart';
-
-class CustomerEntity extends Equatable {
+class AuthorEntity extends Equatable {
 
   final int id;
   final DateTime createdAt;
@@ -10,22 +8,14 @@ class CustomerEntity extends Equatable {
   final String firstName;
   final String lastName;
   final String? title;
-  final String? occupation;
-  final String? phone;
-  final String? mobile;
-  final AddressEntity? address;
 
-  const CustomerEntity({
+  const AuthorEntity({
     required this.id,
     required this.createdAt,
     required this.updatedAt,
     required this.firstName,
     required this.lastName,
-    this.title,
-    this.occupation,
-    this.phone,
-    this.mobile,
-    this.address
+    this.title
   });
 
   @override
@@ -35,10 +25,6 @@ class CustomerEntity extends Equatable {
     updatedAt,
     firstName,
     lastName,
-    title,
-    occupation,
-    phone,
-    mobile,
-    address
+    title
   ];
 }

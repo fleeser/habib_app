@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_conditional/flutter_conditional.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:habib_app/src/features/books/domain/entities/book_entity.dart';
+import 'package:habib_app/core/common/widgets/hb_table.dart';
 import 'package:habib_app/core/extensions/exception_extension.dart';
 import 'package:habib_app/core/utils/enums/toast_type.dart';
 import 'package:habib_app/core/common/widgets/hb_app_bar.dart';
@@ -12,13 +13,10 @@ import 'package:habib_app/core/common/widgets/hb_scaffold.dart';
 import 'package:habib_app/core/common/widgets/sc_text_field.dart';
 import 'package:habib_app/core/extensions/context_extension.dart';
 import 'package:habib_app/core/res/hb_icons.dart';
-import 'package:habib_app/core/res/theme/colors/hb_colors.dart';
 import 'package:habib_app/core/res/theme/spacing/hb_spacing.dart';
-import 'package:habib_app/core/res/theme/typography/hb_typography.dart';
 import 'package:habib_app/core/services/routes.dart';
 import 'package:habib_app/core/utils/constants/hb_ui_constants.dart';
 import 'package:habib_app/core/utils/core_utils.dart';
-import 'package:habib_app/src/features/books/domain/entities/book_entity.dart';
 import 'package:habib_app/src/features/books/presentation/app/books_page_notifier.dart';
 
 class BooksPage extends ConsumerStatefulWidget {
@@ -57,8 +55,26 @@ class _BooksPageState extends ConsumerState<BooksPage> {
     }
   }
 
+  HBTableStatus get _tableStatus {
+    final BooksPageState pageState = ref.read(booksPageNotifierProvider);
+    if (pageState.status == BooksPageStatus.success && pageState.books.isNotEmpty) return HBTableStatus.data;
+    if (pageState.status == BooksPageStatus.failure || (pageState.status == BooksPageStatus.success && pageState.books.isEmpty)) return HBTableStatus.text;
+    return HBTableStatus.loading;
+  }
+
+  String? get _tableText {
+    final BooksPageState pageState = ref.read(booksPageNotifierProvider);
+    if (pageState.status == BooksPageStatus.success && pageState.books.isEmpty) return 'Keine Bücher gefunden.';
+    if (pageState.status == BooksPageStatus.failure) return 'Ein Fehler ist aufgetreten.';
+    return null;
+  }
+
   Future<void> _onBookPressed(int bookId) async {
     await BookDetailsRoute(bookId: bookId).push(context);
+  }
+
+  Future<void> _onCreateBook() async {
+    await const CreateBookRoute().push(context);
   }
 
   @override
@@ -84,8 +100,6 @@ class _BooksPageState extends ConsumerState<BooksPage> {
   @override
   Widget build(BuildContext context) {
 
-    final double tableWidth = context.width - HBUIConstants.navigationRailWidth - context.rightPadding - 4.0 * HBSpacing.lg;
-
     final BooksPageState pageState = ref.watch(booksPageNotifierProvider);
 
     ref.listen<BooksPageState>(
@@ -106,147 +120,46 @@ class _BooksPageState extends ConsumerState<BooksPage> {
               right: context.rightPadding + HBSpacing.lg,
               top: HBSpacing.lg
             ),
-            child: const Row(
+            child: Row(
               children: [
-                HBTextField(
+                const HBTextField(
                   icon: HBIcons.magnifyingGlass,
                   hint: 'Buchtitel oder ISBN',
                   maxWidth: 500.0
                 ),
-                HBGap.lg(),
-                Spacer(),
+                const HBGap.lg(),
+                const Spacer(),
                 HBButton.shrinkFill(
+                  onPressed: _onCreateBook,
                   icon: HBIcons.plus,
                   title: 'Neues Buch'
                 )
               ]
             )
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              left: 2.0 * HBSpacing.lg,
-              right: context.rightPadding + 2.0 * HBSpacing.lg,
-              top: HBSpacing.xxl,
-              bottom: HBSpacing.lg
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: tableWidth * 0.1,
-                  child: Text(
-                    'ID',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: HBTypography.base.copyWith(
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600,
-                      color: HBColors.gray900
-                    )
-                  )
-                ),
-                SizedBox(
-                  width: tableWidth * 0.9,
-                  child: Text(
-                    'Titel',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: HBTypography.base.copyWith(
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600,
-                      color: HBColors.gray900
-                    )
-                  )
-                )
-              ]
-            )
-          ),
           Expanded(
-            child: Conditional.multiCase(
-              cases: <Case>[
-                Case(
-                  condition: pageState.status == BooksPageStatus.success && pageState.books.isNotEmpty,
-                  widget: ListView.builder(
-                    controller: _scrollController,
-                    padding: EdgeInsets.only(
-                      left: HBSpacing.lg,
-                      right: context.rightPadding + HBSpacing.lg,
-                      bottom: context.bottomPadding + HBSpacing.lg
-                    ),
-                    itemCount: pageState.books.length,
-                    itemBuilder: (BuildContext context, int index) {
-
-                      final BookEntity book = pageState.books[index];
-
-                      return SizedBox(
-                        height: 50.0,
-                        child: RawMaterialButton(
-                          onPressed: () => _onBookPressed(book.id),
-                          padding: const EdgeInsets.symmetric(horizontal: HBSpacing.lg),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(HBUIConstants.defaultBorderRadius)),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: tableWidth * 0.1,
-                                child: Text(
-                                  book.id.toString(),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: HBTypography.base.copyWith(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: HBColors.gray900
-                                  )
-                                )
-                              ),
-                              SizedBox(
-                                width: tableWidth * 0.9,
-                                child: Text(
-                                  book.title,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: HBTypography.base.copyWith(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: HBColors.gray900
-                                  )
-                                )
-                              )
-                            ]
-                          )
-                        )
-                      );
-                    }
-                  )
-                ),
-                Case(
-                  condition: pageState.status == BooksPageStatus.success && pageState.books.isEmpty,
-                  widget: Center(
-                    child: Text(
-                      'Keine Bücher gefunden.',
-                      textAlign: TextAlign.center,
-                      style: HBTypography.base.copyWith(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: HBColors.gray900
-                      )
-                    )
-                  )
-                ),
-                Case(
-                  condition: pageState.status == BooksPageStatus.failure,
-                  widget: Center(
-                    child: Text(
-                      'Ein Fehler ist aufgetreten.',
-                      textAlign: TextAlign.center,
-                      style: HBTypography.base.copyWith(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: HBColors.gray900
-                      )
-                    )
-                  )
-                )
-              ]
+            child: HBTable(
+              onPressed: (int index) => _onBookPressed(pageState.books[index].id),
+              status: _tableStatus,
+              padding: EdgeInsets.only(
+                left: HBSpacing.lg,
+                right: context.rightPadding + HBSpacing.lg,
+                bottom: context.bottomPadding + HBSpacing.lg,
+                top: HBSpacing.xxl
+              ),
+              controller: _scrollController,
+              tableWidth: context.width - HBUIConstants.navigationRailWidth - context.rightPadding - 4.0 * HBSpacing.lg,
+              columnLength: 2,
+              fractions: const [ 0.1, 0.9 ],
+              titles: const [ 'ID', 'Titel' ],
+              items: List.generate(pageState.books.length, (int index) {
+                final BookEntity book = pageState.books[index];
+                return [
+                  book.id.toString(),
+                  book.title
+                ];
+              }),
+              text: _tableText
             )
           )
         ]
