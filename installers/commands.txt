@@ -1,2 +1,2 @@
-- macOS: cd installers/macos appdmg ./config.json ./Habib-Installer.dmg
+- macOS: cd installers/macos && appdmg ./config.json ./Habib-Installer.dmg
 - Windows: cd flutter && dart run msix:create

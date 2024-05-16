@@ -1,2 +1,5 @@
 # macOS related
 macos/*.dmg
+
+# Windows related
+Windows/*.msix
