@@ -118,8 +118,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
             padding: EdgeInsets.only(
               left: HBSpacing.lg,
               right: context.rightPadding + HBSpacing.lg,
-              top: HBSpacing.lg,
-              bottom: HBSpacing.lg
+              top: HBSpacing.lg
             ),
             child: Row(
               children: [
