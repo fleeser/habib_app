@@ -42,6 +42,8 @@ dev_dependencies:
   riverpod_generator: ^2.3.11
   go_router_builder: ^2.4.1
 
+  msix: ^3.16.7
+
 flutter:
 
   uses-material-design: true
@@ -81,3 +83,13 @@ flutter:
         - asset: assets/fonts/Switzer-Thin.otf
         - asset: assets/fonts/Switzer-ThinItalic.otf
           style: italic
+
+msix_config:
+  display_name: Habib
+  publisher_display_name: Berufskolleg am Haspel
+  identity_name: dev.fleeser.habib
+  logo_path: ../installers/Windows/app_icon.png
+  msix_version: 1.0.0.0
+  languages: de-de
+  output_path: ../installers/Windows
+  output_name: Habib-Installer
