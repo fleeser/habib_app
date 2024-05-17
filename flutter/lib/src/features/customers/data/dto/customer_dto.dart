@@ -14,7 +14,7 @@ class CustomerDto extends CustomerEntity {
     super.occupation,
     super.phone,
     super.mobile,
-    super.address
+    required super.address
   });
 
   factory CustomerDto.fromJson(Json json) {

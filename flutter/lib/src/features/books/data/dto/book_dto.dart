@@ -1,6 +1,5 @@
 import 'package:habib_app/core/extensions/generic_extension.dart';
 import 'package:habib_app/core/utils/typedefs.dart';
-import 'package:habib_app/src/features/books/data/dto/author_dto.dart';
 import 'package:habib_app/src/features/books/data/dto/publisher_dto.dart';
 import 'package:habib_app/src/features/books/domain/entities/book_entity.dart';
 
@@ -15,8 +14,9 @@ class BookDto extends BookEntity {
     super.isbn13,
     super.edition,
     super.publishDate,
-    super.publisher,
-    super.author,
+    required super.publisher,
+    required super.authors,
+    required super.categories,
     super.bought
   });
 
@@ -30,8 +30,9 @@ class BookDto extends BookEntity {
       isbn13: json['book_isbn_13'] as String?,
       edition: json['book_edition'] as int?,
       publishDate: json['book_publish_date'] as DateTime?,
-      publisher: (json['publisher_id'] as int?).whenNotNull<PublisherDto>((int _) => PublisherDto.fromJson(json)),
-      author: (json['author_id'] as int?).whenNotNull<AuthorDto>((int _) => AuthorDto.fromJson(json)),
+      publisher: PublisherDto.fromJson(json),
+      authors: const [], // TODO
+      categories: const [], // TODO
       bought: (json['bought'] as int?).whenNotNull<bool>((int databaseBought) => databaseBought == 1)
     );
   }

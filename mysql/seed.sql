@@ -1,362 +1,479 @@
-INSERT INTO customers (name)
-VALUES ('Marta Berger');
-
-INSERT INTO customers (name)
-VALUES ('Leonard Krause');
-
-INSERT INTO customers (name)
-VALUES ('Karina Fischer');
-
-INSERT INTO customers (name)
-VALUES ('Felix Maier');
-
-INSERT INTO customers (name)
-VALUES ('Isabel Weber');
-
-INSERT INTO customers (name)
-VALUES ('Julius Schulz');
-
-INSERT INTO customers (name)
-VALUES ('Klara Richter');
-
-INSERT INTO customers (name)
-VALUES ('Samuel Hoffmann');
-
-INSERT INTO customers (name)
-VALUES ('Helena Neumann');
-
-INSERT INTO customers (name)
-VALUES ('Nico Schmidt');
-
-INSERT INTO customers (name)
-VALUES ('Hannah Lehmann');
-
-INSERT INTO customers (name)
-VALUES ('Lucas Brandt');
-
-INSERT INTO customers (name)
-VALUES ('Emma Klein');
-
-INSERT INTO customers (name)
-VALUES ('Maximilian Becker');
-
-INSERT INTO customers (name)
-VALUES ('Sofia Braun');
-
-INSERT INTO customers (name)
-VALUES ('Lena Müller');
-
-INSERT INTO customers (name)
-VALUES ('Tim Koch');
-
-INSERT INTO customers (name)
-VALUES ('Olivia Wolf');
-
-INSERT INTO customers (name)
-VALUES ('Lucas Mayer');
-
-INSERT INTO customers (name)
-VALUES ('Lara Hoffmann');
-
-INSERT INTO customers (name)
-VALUES ('Johannes Bauer');
-
-INSERT INTO customers (name)
-VALUES ('Sophie Schneider');
-
-INSERT INTO customers (name)
-VALUES ('Florian Schwarz');
-
-INSERT INTO customers (name)
-VALUES ('Luisa Zimmermann');
-
-INSERT INTO customers (name)
-VALUES ('Paul Wagner');
-
-INSERT INTO customers (name)
-VALUES ('Mia Neumann');
-
-INSERT INTO customers (name)
-VALUES ('Fabian Becker');
-
-INSERT INTO customers (name)
-VALUES ('Laura Schulz');
-
-INSERT INTO customers (name)
-VALUES ('Matthias Weber');
-
-INSERT INTO customers (name)
-VALUES ('Anna Brandt');
-
-INSERT INTO customers (name)
-VALUES ('Patrick Klein');
-
-INSERT INTO customers (name)
-VALUES ('Lena Fischer');
-
-INSERT INTO customers (name)
-VALUES ('Jan Richter');
-
-INSERT INTO customers (name)
-VALUES ('Lisa Seidel');
-
-INSERT INTO customers (name)
-VALUES ('Ben Friedrich');
-
-INSERT INTO customers (name)
-VALUES ('Charlotte Müller');
-
-INSERT INTO customers (name)
-VALUES ('Alexander Wolf');
-
-INSERT INTO customers (name)
-VALUES ('Jonas Schneider');
-
-INSERT INTO customers (name)
-VALUES ('Lina Bauer');
-
-INSERT INTO customers (name)
-VALUES ('Julian Wagner');
-
-INSERT INTO customers (name)
-VALUES ('Ella Weber');
-
-INSERT INTO customers (name)
-VALUES ('Alexander Koch');
-
-INSERT INTO customers (name)
-VALUES ('Clara Meier');
-
-INSERT INTO customers (name)
-VALUES ('Christian Schubert');
-
-INSERT INTO customers (name)
-VALUES ('Nina Fischer');
-
-INSERT INTO customers (name)
-VALUES ('Lukas Brandt');
-
-INSERT INTO customers (name)
-VALUES ('Maja Lehmann');
-
-INSERT INTO customers (name)
-VALUES ('Konstantin Berger');
-
-INSERT INTO customers (name)
-VALUES ('Emma Braun');
-
-INSERT INTO customers (name)
-VALUES ('Samuel Weiß');
-
-INSERT INTO customers (name)
-VALUES ('Leonor Maier');
-
-INSERT INTO customers (name)
-VALUES ('Johanna Hofmann');
-
-INSERT INTO customers (name)
-VALUES ('Tom Richter');
-
-INSERT INTO customers (name)
-VALUES ('Paula Schuster');
-
-INSERT INTO customers (name)
-VALUES ('Lucas Krause');
-
-INSERT INTO customers (name)
-VALUES ('Mia Wagner');
-
-INSERT INTO customers (name)
-VALUES ('Milan Schröder');
-
-INSERT INTO customers (name)
-VALUES ('Eva Sommer');
-
-INSERT INTO customers (name)
-VALUES ('David Fischer');
-
-INSERT INTO customers (name)
-VALUES ('Lina Meier');
-
-INSERT INTO customers (name)
-VALUES ('Felix Koch');
-
-INSERT INTO customers (name)
-VALUES ('Greta Wagner');
-
-INSERT INTO customers (name)
-VALUES ('Paul Weber');
-
-INSERT INTO customers (name)
-VALUES ('Mia Schulz');
-
-INSERT INTO customers (name)
-VALUES ('Jan Bauer');
-
-INSERT INTO customers (name)
-VALUES ('Emily Müller');
-
-INSERT INTO customers (name)
-VALUES ('Sebastian Brandt');
-
-INSERT INTO customers (name)
-VALUES ('Lea Richter');
-
-INSERT INTO customers (name)
-VALUES ('Tim Hoffmann');
-
-INSERT INTO customers (name)
-VALUES ('Johanna Becker');
-
-INSERT INTO customers (name)
-VALUES ('Nico Schneider');
-
-INSERT INTO customers (name)
-VALUES ('Elisa Neumann');
-
-INSERT INTO customers (name)
-VALUES ('Louis Lehmann');
-
-INSERT INTO customers (name)
-VALUES ('Julia Braun');
-
-INSERT INTO customers (name)
-VALUES ('Maximilian Schäfer');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die Reise ins Unbekannte', '123456789X', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Das Geheimnis der alten Burg', NULL, '9781234567897');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Gedanken eines Wanderers', NULL, NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die Abenteuer des Seefahrers', '9876543210', '9789876543210');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Der verlorene Schatz', '0192837465', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die Magie des Nordens', NULL, '9780192837465');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Geschichten aus dem Süden', NULL, NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die Legende des Drachen', '1029384756', '9781029384756');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Das Geheimnis der Berge', '123456789X', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die verlorene Stadt', NULL, '9781234567897');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Ein Tag im Leben', NULL, NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Der alte Mann und das Meer', '9876543210', '9789876543210');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die verborgene Wahrheit', '0192837465', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Das vergessene Königreich', NULL, '9780192837465');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Wunder der Natur', NULL, NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die Reise nach Osten', '1029384756', '9781029384756');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Märchen aus aller Welt', '1234512345', '9781234512345');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die alten Legenden', '9876543210', '9789876543210');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die verlorene Geschichte', '0987654321', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die Kunst des Krieges', NULL, '9780987654321');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Der geheime Garten', NULL, NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Der größte Schatz', '1234567890', '9781234567890');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Der entführte König', '2345678901', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Das Ende der Welt', NULL, '9782345678901');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Wissenschaftliche Entdeckungen', NULL, NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die verlorenen Bücher', '3456789012', '9783456789012');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die besten Rezepte', '4567890123', '9784567890123');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Das Mysterium des Lebens', '5678901234', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Geschichten aus dem Wald', NULL, '9785678901234');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die verlorenen Relikte', '6789012345', '9786789012345');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die verlorene Perle', '7890123456', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die verborgenen Inseln', NULL, '9787890123456');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die magischen Reiche', '6789012345', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Das geheime Versteck', NULL, '9786789012345');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die verlorene Bibliothek', NULL, NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Der dunkle Ozean', '7890123456', '9787890123456');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Der vergessene Tempel', '8901234567', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Das verwunschene Schloss', NULL, '9788901234567');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Geheimnisse des Universums', NULL, NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die geheime Grotte', '9012345678', '9789012345678');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Reisen in die Vergangenheit', '2345678901', '9782345678901');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die verlorene Stadt Atlantis', '3456789012', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Das Abenteuer des Lebens', NULL, '9783456789012');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Die Entdeckung der neuen Welt', '4567890123', '9784567890123');
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Der vergessene Zauber', '5678901234', NULL);
-
-INSERT INTO books (title, isbn_10, isbn_13)
-VALUES ('Das verborgene Labyrinth', NULL, '9785678901234');
+INSERT INTO addresses (city, postal_code, street) VALUES
+('Berlin', '10115', 'Unter den Linden 1'),
+('Hamburg', '20095', 'Mönckebergstraße 10'),
+('München', '80331', 'Marienplatz 1'),
+('Köln', '50667', 'Domkloster 4'),
+('Frankfurt am Main', '60311', 'Zeil 5'),
+('Stuttgart', '70173', 'Königstraße 20'),
+('Düsseldorf', '40212', 'Königsallee 1'),
+('Dortmund', '44137', 'Westenhellweg 15'),
+('Essen', '45127', 'Kettwiger Straße 22'),
+('Leipzig', '04109', 'Grimmaische Straße 1'),
+('Bremen', '28195', 'Am Markt 21'),
+('Dresden', '01067', 'Prager Straße 2'),
+('Hannover', '30159', 'Bahnhofstraße 3'),
+('Nürnberg', '90403', 'Königstraße 10'),
+('Duisburg', '47051', 'Königstraße 50'),
+('Bochum', '44787', 'Huestraße 17'),
+('Wuppertal', '42103', 'Alte Freiheit 7'),
+('Bielefeld', '33602', 'Bahnhofstraße 25'),
+('Bonn', '53111', 'Poststraße 42'),
+('Münster', '48143', 'Prinzipalmarkt 8'),
+('Karlsruhe', '76133', 'Kaiserstraße 45'),
+('Mannheim', '68159', 'Planken 12'),
+('Augsburg', '86150', 'Maximilianstraße 35'),
+('Wiesbaden', '65183', 'Kirchgasse 28'),
+('Gelsenkirchen', '45879', 'Bahnhofstraße 11'),
+('Mönchengladbach', '41061', 'Hindenburgstraße 19'),
+('Braunschweig', '38100', 'Bohlweg 22'),
+('Chemnitz', '09111', 'Rosenhof 8'),
+('Kiel', '24103', 'Holstenstraße 30'),
+('Aachen', '52062', 'Adalbertstraße 18'),
+('Halle (Saale)', '06108', 'Große Ulrichstraße 10'),
+('Magdeburg', '39104', 'Breiter Weg 25'),
+('Freiburg im Breisgau', '79098', 'Kaiser-Joseph-Straße 12'),
+('Krefeld', '47798', 'Hochstraße 32'),
+('Lübeck', '23552', 'Königstraße 14'),
+('Oberhausen', '46045', 'Marktstraße 16'),
+('Erfurt', '99084', 'Anger 1'),
+('Mainz', '55116', 'Ludwigsstraße 20'),
+('Rostock', '18055', 'Kröpeliner Straße 9'),
+('Kassel', '34117', 'Obere Königsstraße 4'),
+('Hagen', '58095', 'Elberfelder Straße 8'),
+('Saarbrücken', '66111', 'Bahnhofstraße 10'),
+('Hamm', '59065', 'Weststraße 6'),
+('Mülheim an der Ruhr', '45468', 'Schloßstraße 2'),
+('Ludwigshafen am Rhein', '67059', 'Bismarckstraße 18'),
+('Oldenburg', '26122', 'Lange Straße 15'),
+('Leverkusen', '51373', 'Wiesdorfer Platz 7'),
+('Osnabrück', '49074', 'Große Straße 11'),
+('Solingen', '42651', 'Hauptstraße 21'),
+('Heidelberg', '69117', 'Hauptstraße 14'),
+('Herne', '44623', 'Bahnhofstraße 24'),
+('Neuss', '41460', 'Büchel 12'),
+('Darmstadt', '64283', 'Luisenplatz 3');
+
+INSERT INTO customers (first_name, last_name, title, occupation, phone, mobile, address_id) VALUES
+('Anna', 'Müller', 'Dr.', 'Ärztin', '030123456', '01761234567', 1),
+('Peter', 'Schmidt', 'Prof.', 'Ingenieur', '040234567', '01772345678', 2),
+('Laura', 'Schneider', 'Dipl.-Ing.', 'Architektin', '089345678', '01783456789', 3),
+('Michael', 'Fischer', NULL, 'Lehrer', '0221123456', '01791234567', 4),
+('Julia', 'Weber', 'M.Sc.', 'Informatikerin', '069567890', '01762345678', 5),
+('Thomas', 'Wagner', NULL, 'Jurist', '0711234567', '01773456789', 6),
+('Nina', 'Becker', 'B.A.', 'Künstlerin', '0721345678', '01784567890', 7),
+('Daniel', 'Hoffmann', 'Ph.D.', 'Wissenschaftler', '0731456789', '01795678901', 8),
+('Stefan', 'Schulz', NULL, 'Kaufmann', '0741567890', '01806789012', 9),
+('Lisa', 'Koch', NULL, 'Marketing Managerin', '0751678901', '01817890123', 10),
+('Christian', 'Bauer', NULL, 'Mechaniker', '0761789012', '01828901234', 11),
+('Sandra', 'Richter', 'M.A.', 'Journalistin', '0771890123', '01839012345', 12),
+('Markus', 'Klein', NULL, 'Elektriker', '0781901234', '01849023456', 13),
+('Sophia', 'Wolf', NULL, 'Verkäuferin', '0792012345', '01859034567', 14),
+('Alexander', 'Schröder', NULL, 'Zahnarzt', '0802123456', '01869045678', 15),
+('Laura', 'Neumann', NULL, 'Psychologin', '0812234567', '01879056789', 16),
+('Tim', 'Schwarz', NULL, 'Gärtner', '0822345678', '01889067890', 17),
+('Johanna', 'Krause', 'Dr.', 'Biologin', '0832456789', '01899078901', 18),
+('Matthias', 'Meier', NULL, 'Chemiker', '0842567890', '01900123456', 19),
+('Sarah', 'Lehmann', NULL, 'Pharmazeutin', '0852678901', '01911234567', 20),
+('Jan', 'Hartmann', NULL, 'Arzt', '0862789012', '01922345678', 21),
+('Claudia', 'Krüger', NULL, 'Tierärztin', '0872890123', '01933456789', 22),
+('Patrick', 'Pohl', NULL, 'Musiker', '0882901234', '01944567890', 23),
+('Marie', 'Schmitt', NULL, 'Fotografin', '0893012345', '01955678901', 24),
+('Simon', 'Lang', NULL, 'Ingenieur', '0903123456', '01966789012', 25),
+('Melanie', 'Scholz', 'Dr.', 'Physikerin', '0913234567', '01977890123', 26),
+('Johannes', 'König', NULL, 'Mathematiker', '0923345678', '01988901234', 27),
+('Theresa', 'Fuchs', NULL, 'Sozialarbeiterin', '0933456789', '01999012345', 28),
+('Paul', 'Graf', NULL, 'Politiker', '0943567890', '02000123456', 29),
+('Nadine', 'Berg', NULL, 'Geologin', '0953678901', '02011234567', 30),
+('Oliver', 'Hahn', NULL, 'Philosoph', '0963789012', '02022345678', 31),
+('Vanessa', 'Voigt', NULL, 'Köchin', '0973890123', '02033456789', 32),
+('Sebastian', 'Franke', NULL, 'Autor', '0983901234', '02044567890', 33),
+('Helena', 'Schreiber', NULL, 'Redakteurin', '0994012345', '02055678901', 34),
+('David', 'Werner', NULL, 'Bibliothekar', '1004123456', '02066789012', 35),
+('Jessica', 'Lorenz', NULL, 'Erzieherin', '1014234567', '02077890123', 36),
+('Martin', 'Brandt', NULL, 'Schreiner', '1024345678', '02088901234', 37),
+('Hanna', 'Jansen', NULL, 'Buchhalterin', '1034456789', '02099012345', 38),
+('Florian', 'Mayer', NULL, 'Historiker', '1044567890', '02100123456', 39),
+('Leonie', 'Keller', NULL, 'Landschaftsarchitektin', '1054678901', '02111234567', 40),
+('Jonas', 'Arnold', NULL, 'Landwirt', '1064789012', '02122345678', 41),
+('Katrin', 'Pfeiffer', NULL, 'Umweltingenieurin', '1074890123', '02133456789', 42),
+('Felix', 'Zimmermann', NULL, 'Sportlehrer', '1084901234', '02144567890', 43),
+('Karolin', 'Baumann', NULL, 'Lehrerin', '1095012345', '02155678901', 44),
+('Marius', 'Huber', NULL, 'Unternehmensberater', '1105123456', '02166789012', 45),
+('Nicole', 'Schuster', NULL, 'Innenarchitektin', '1115234567', '02177890123', 46),
+('Lukas', 'Busch', NULL, 'Verwaltungsfachangestellter', '1125345678', '02188901234', 47),
+('Katharina', 'Horn', NULL, 'Mediengestalterin', '1135456789', '02199012345', 48),
+('Tobias', 'Schäfer', NULL, 'Bankkaufmann', '1145567890', '02200123456', 49),
+('Sophia', 'Ebert', NULL, 'Eventmanagerin', '1155678901', '02211234567', 50);
+
+INSERT INTO publishers (name, city) VALUES
+('Penguin Random House', 'New York'),
+('HarperCollins', 'London'),
+('Macmillan Publishers', NULL),
+('Simon & Schuster', 'New York'),
+('Hachette Livre', 'Paris'),
+('Scholastic Corporation', 'New York'),
+('Pearson Education', 'London'),
+('Wiley', NULL),
+('Springer Nature', 'Berlin'),
+('Oxford University Press', 'Oxford'),
+('Cambridge University Press', 'Cambridge'),
+('McGraw-Hill Education', NULL),
+('SAGE Publications', 'Thousand Oaks'),
+('Cengage Learning', 'Boston'),
+('Elsevier', 'Amsterdam'),
+('Johns Hopkins University Press', 'Baltimore'),
+('Taylor & Francis', 'London'),
+('Bloomsbury Publishing', 'London'),
+('Harlequin Enterprises', 'Toronto'),
+('Andrews McMeel Publishing', 'Kansas City'),
+('Beacon Press', NULL),
+('Chronicle Books', 'San Francisco'),
+('Kensington Publishing Corp.', 'New York'),
+('Workman Publishing Company', 'New York'),
+('Farrar, Straus and Giroux', 'New York'),
+('Grove Atlantic', 'New York'),
+('Houghton Mifflin Harcourt', 'Boston'),
+('W.W. Norton & Company', 'New York'),
+('Zondervan', 'Grand Rapids'),
+('Rodale Books', 'New York'),
+('Sterling Publishing', 'New York'),
+('Hay House', 'Carlsbad'),
+('Island Press', 'Washington, D.C.'),
+('North Atlantic Books', 'Berkeley'),
+('Pantheon Books', 'New York'),
+('Basic Books', 'New York'),
+('Seven Stories Press', 'New York'),
+('Verso Books', 'London'),
+('No Starch Press', 'San Francisco'),
+('MIT Press', 'Cambridge'),
+('University of California Press', 'Oakland'),
+('Yale University Press', 'New Haven'),
+('Princeton University Press', 'Princeton'),
+('University of Chicago Press', 'Chicago'),
+('Harvard University Press', 'Cambridge'),
+('Stanford University Press', 'Stanford'),
+('Duke University Press', 'Durham'),
+('Indiana University Press', 'Bloomington'),
+('University of Nebraska Press', 'Lincoln'),
+('Penguin Classics', NULL);
+
+INSERT INTO authors (first_name, last_name, title) VALUES
+('George', 'Orwell', NULL),
+('J.K.', 'Rowling', NULL),
+('Ernest', 'Hemingway', NULL),
+('Jane', 'Austen', NULL),
+('Mark', 'Twain', 'Mr.'),
+('Virginia', 'Woolf', NULL),
+('F. Scott', 'Fitzgerald', NULL),
+('Mary', 'Shelley', NULL),
+('Charles', 'Dickens', 'Mr.'),
+('Leo', 'Tolstoy', 'Count'),
+('Agatha', 'Christie', NULL),
+('William', 'Shakespeare', 'Mr.'),
+('Emily', 'Bronte', NULL),
+('Harper', 'Lee', NULL),
+('J.R.R.', 'Tolkien', 'Prof.'),
+('Herman', 'Melville', 'Mr.'),
+('Edgar Allan', 'Poe', NULL),
+('Franz', 'Kafka', NULL),
+('Gabriel Garcia', 'Marquez', 'Dr.'),
+('James', 'Joyce', NULL),
+('Fyodor', 'Dostoevsky', 'Mr.'),
+('H.G.', 'Wells', NULL),
+('George', 'Eliot', NULL),
+('Victor', 'Hugo', 'Mr.'),
+('Charlotte', 'Bronte', NULL),
+('Jack', 'London', NULL),
+('Lewis', 'Carroll', 'Rev.'),
+('Jules', 'Verne', NULL),
+('Arthur Conan', 'Doyle', 'Sir'),
+('Oscar', 'Wilde', NULL),
+('Sylvia', 'Plath', NULL),
+('Homer', 'Simpson', NULL),
+('Miguel de', 'Cervantes', 'Don'),
+('Dante', 'Alighieri', NULL),
+('Geoffrey', 'Chaucer', NULL),
+('John', 'Milton', 'Mr.'),
+('Emily', 'Dickinson', NULL),
+('Ralph Waldo', 'Emerson', NULL),
+('Walt', 'Whitman', NULL),
+('Edith', 'Wharton', NULL),
+('Louisa May', 'Alcott', NULL),
+('Henry', 'James', NULL),
+('Marcel', 'Proust', NULL),
+('Virginia', 'Woolf', NULL),
+('Aldous', 'Huxley', NULL),
+('Thomas', 'Mann', 'Dr.'),
+('Leo', 'Tolstoy', 'Count'),
+('Hermann', 'Hesse', NULL),
+('Samuel', 'Beckett', NULL),
+('Vladimir', 'Nabokov', NULL);
+
+INSERT INTO books (title, isbn_10, isbn_13, edition, publish_date, publisher_id, bought) VALUES
+('1984', '0451524934', '9780451524935', 1, '1949-06-08', 1, 1),
+('To Kill a Mockingbird', '0060935464', '9780060935467', 1, '1960-07-11', 2, 1),
+('The Great Gatsby', '0743273567', '9780743273565', 1, '1925-04-10', 3, 1),
+('Moby Dick', NULL, '9781503280786', NULL, '1851-10-18', 4, 0),
+('Pride and Prejudice', '0679783261', '9780679783268', 1, '1813-01-28', 5, 1),
+('War and Peace', '0199232768', '9780199232765', NULL, '1869-01-01', 6, 0),
+('Crime and Punishment', '0143058142', '9780143058144', NULL, '1866-01-01', 7, 1),
+('The Catcher in the Rye', '0316769487', '9780316769488', 1, '1951-07-16', 8, 1),
+('Brave New World', '0060850523', '9780060850524', NULL, '1932-08-01', 9, 1),
+('The Hobbit', '054792822X', '9780547928227', 1, '1937-09-21', 10, 1),
+('Fahrenheit 451', '1451673310', '9781451673319', NULL, '1953-10-19', 11, 0),
+('Jane Eyre', '0142437204', '9780142437209', 1, '1847-10-16', 12, 1),
+('Wuthering Heights', '0141439556', '9780141439556', 1, '1847-12-01', 13, 0),
+('Animal Farm', '0451526341', '9780451526342', 1, '1945-08-17', 14, 1),
+('The Odyssey', NULL, NULL, NULL, '800-01-01', 15, 0),
+('Les Misérables', '045141943X', '9780451419439', 1, '1862-01-01', 16, 1),
+('The Brothers Karamazov', '0374528373', '9780374528379', NULL, '1880-01-01', 17, 0),
+('The Divine Comedy', NULL, '9780142437223', 1, '1320-01-01', 18, 1),
+('Hamlet', '0140714545', '9780140714548', NULL, '1603-01-01', 19, 1),
+('The Iliad', NULL, NULL, NULL, '750-01-01', 20, 0),
+('A Tale of Two Cities', '0486406512', '9780486406510', NULL, '1859-04-30', 21, 1),
+('Don Quixote', '0060934344', '9780060934347', 1, '1605-01-16', 22, 1),
+('One Hundred Years of Solitude', '0060883286', '9780060883287', NULL, '1967-05-30', 23, 1),
+('The Picture of Dorian Gray', '0141439572', '9780141439570', 1, '1890-06-20', 24, 1),
+('Ulysses', '0199535671', '9780199535675', 1, '1922-02-02', 25, 0),
+('The Count of Monte Cristo', '0140449264', '9780140449266', 1, '1844-01-01', 26, 1),
+('Frankenstein', '0486282112', '9780486282114', NULL, '1818-01-01', 27, 1),
+('Dracula', '0486411095', '9780486411095', 1, '1897-05-26', 28, 1),
+('The Sun Also Rises', '0743297334', '9780743297332', 1, '1926-10-22', 29, 1),
+('Gone with the Wind', '1451635621', '9781451635621', NULL, '1936-06-30', 30, 0),
+('The Lord of the Rings', NULL, '9780544003415', NULL, '1954-07-29', 31, 1),
+('The Old Man and the Sea', '0684830493', '9780684830490', 1, '1952-09-01', 32, 1),
+('Lolita', '0679723161', '9780679723165', 1, '1955-09-15', 33, 1),
+('The Scarlet Letter', '0486280489', '9780486280489', 1, '1850-03-16', 34, 0),
+('Moby-Dick', '1503280780', '9781503280786', NULL, '1851-10-18', 35, 0),
+('Anna Karenina', '0143035002', '9780143035008', 1, '1877-01-01', 36, 1),
+('Catch-22', '1451626657', '9781451626650', NULL, '1961-11-10', 37, 0),
+('Slaughterhouse-Five', '0385333846', '9780385333849', NULL, '1969-03-31', 38, 1),
+('The Grapes of Wrath', '0143039431', '9780143039433', 1, '1939-04-14', 39, 1),
+('Brave New World', '0060850523', '9780060850524', NULL, '1932-08-01', 40, 1),
+('The Adventures of Huckleberry Finn', '0486280616', '9780486280618', 1, '1884-12-10', 41, 0),
+('Of Mice and Men', '0140177396', '9780140177397', 1, '1937-02-06', 42, 1),
+('A Clockwork Orange', '0393312836', '9780393312836', NULL, '1962-01-01', 43, 0),
+('Beloved', '1400033411', '9781400033416', NULL, '1987-09-16', 44, 1),
+('Invisible Man', '0679732764', '9780679732761', 1, '1952-04-14', 45, 0),
+('Gone Girl', '0307588378', '9780307588371', 1, '2012-06-05', 46, 1),
+('The Road', '0307387895', '9780307387899', 1, '2006-09-26', 47, 1),
+('Life of Pi', '0156027321', '9780156027328', 1, '2001-09-11', 48, 1),
+('The Handmaids Tale', '038549081X', '9780385490818', 1, '1985-04-01', 49, 1),
+('The Kite Runner', '1594480001', '9781594480003', 1, '2003-05-29', 50, 1);
+
+INSERT INTO categories (name) VALUES
+('Fiction'),
+('Non-Fiction'),
+('Science Fiction'),
+('Fantasy'),
+('Mystery'),
+('Biography'),
+('History'),
+('Romance'),
+('Horror'),
+('Self-Help'),
+('Philosophy'),
+('Religion'),
+('Science'),
+('Health'),
+('Travel'),
+('Childrens'),
+('Young Adult'),
+('Poetry'),
+('Drama'),
+('Adventure'),
+('Comics'),
+('Cookbooks'),
+('Art'),
+('Business'),
+('Economics'),
+('Education'),
+('Law'),
+('Music'),
+('Politics'),
+('Psychology'),
+('Technology'),
+('Sports'),
+('True Crime'),
+('Memoir'),
+('Classics'),
+('Short Stories'),
+('Thriller'),
+('Humor'),
+('Graphic Novels'),
+('LGBTQ+');
+
+INSERT INTO borrows (book_id, customer_id, end_date, status) VALUES
+(1, 1, '2024-06-15', 'borrowed'),
+(2, 2, '2024-06-20', 'returned'),
+(3, 3, '2024-06-25', 'exceeded'),
+(4, 4, '2024-06-30', 'warned'),
+(5, 5, '2024-07-05', 'borrowed'),
+(6, 6, '2024-07-10', 'returned'),
+(7, 7, '2024-07-15', 'exceeded'),
+(8, 8, '2024-07-20', 'warned'),
+(9, 9, '2024-07-25', 'borrowed'),
+(10, 10, '2024-07-30', 'returned'),
+(11, 11, '2024-08-04', 'exceeded'),
+(12, 12, '2024-08-09', 'warned'),
+(13, 13, '2024-08-14', 'borrowed'),
+(14, 14, '2024-08-19', 'returned'),
+(15, 15, '2024-08-24', 'exceeded'),
+(16, 16, '2024-08-29', 'warned'),
+(17, 17, '2024-09-03', 'borrowed'),
+(18, 18, '2024-09-08', 'returned'),
+(19, 19, '2024-09-13', 'exceeded'),
+(20, 20, '2024-09-18', 'warned'),
+(21, 21, '2024-09-23', 'borrowed'),
+(22, 22, '2024-09-28', 'returned'),
+(23, 23, '2024-10-03', 'exceeded'),
+(24, 24, '2024-10-08', 'warned'),
+(25, 25, '2024-10-13', 'borrowed'),
+(26, 26, '2024-10-18', 'returned'),
+(27, 27, '2024-10-23', 'exceeded'),
+(28, 28, '2024-10-28', 'warned'),
+(29, 29, '2024-11-02', 'borrowed'),
+(30, 30, '2024-11-07', 'returned'),
+(31, 31, '2024-11-12', 'exceeded'),
+(32, 32, '2024-11-17', 'warned'),
+(33, 33, '2024-11-22', 'borrowed'),
+(34, 34, '2024-11-27', 'returned'),
+(35, 35, '2024-12-02', 'exceeded'),
+(36, 36, '2024-12-07', 'warned'),
+(37, 37, '2024-12-12', 'borrowed'),
+(38, 38, '2024-12-17', 'returned'),
+(39, 39, '2024-12-22', 'exceeded'),
+(40, 40, '2024-12-27', 'warned'),
+(41, 41, '2024-12-31', 'borrowed'),
+(42, 42, '2025-01-05', 'returned'),
+(43, 43, '2025-01-10', 'exceeded'),
+(44, 44, '2025-01-15', 'warned'),
+(45, 45, '2025-01-20', 'borrowed'),
+(46, 46, '2025-01-25', 'returned'),
+(47, 47, '2025-01-30', 'exceeded'),
+(48, 48, '2025-02-04', 'warned'),
+(49, 49, '2025-02-09', 'borrowed'),
+(50, 50, '2025-02-14', 'returned');
+
+INSERT INTO book_authors (book_id, author_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10),
+(11, 11),
+(12, 12),
+(13, 13),
+(14, 14),
+(15, 15),
+(16, 16),
+(17, 17),
+(18, 18),
+(19, 19),
+(20, 20),
+(21, 21),
+(22, 22),
+(23, 23),
+(24, 24),
+(25, 25),
+(26, 26),
+(27, 27),
+(28, 28),
+(29, 29),
+(30, 30),
+(31, 31),
+(32, 32),
+(33, 33),
+(34, 34),
+(35, 35),
+(36, 36),
+(37, 37),
+(38, 38),
+(39, 39),
+(40, 40),
+(41, 41),
+(42, 42),
+(43, 43),
+(44, 44),
+(45, 45),
+(46, 46),
+(47, 47),
+(48, 48),
+(49, 49),
+(50, 50),
+(3, 1),
+(10, 9),
+(20, 5),
+(25, 3),
+(30, 1),
+(40, 12),
+(50, 2);
+
+INSERT INTO book_categories (book_id, category_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10),
+(11, 11),
+(12, 12),
+(13, 13),
+(14, 14),
+(15, 15),
+(16, 16),
+(17, 17),
+(18, 18),
+(19, 19),
+(20, 20),
+(21, 21),
+(22, 22),
+(23, 23),
+(24, 24),
+(25, 25),
+(26, 26),
+(27, 27),
+(28, 28),
+(29, 29),
+(30, 30),
+(1, 2),
+(2, 1),
+(3, 1),
+(4, 1),
+(5, 3),
+(6, 4),
+(7, 5),
+(8, 6),
+(9, 7),
+(10, 8),
+(11, 9),
+(12, 10),
+(13, 11),
+(14, 12),
+(15, 13),
+(16, 14),
+(17, 15),
+(18, 16),
+(19, 17),
+(20, 18),
+(21, 19),
+(22, 20),
+(23, 21),
+(24, 22),
+(25, 23),
+(26, 24),
+(27, 25),
+(28, 26),
+(29, 27),
+(30, 28),
+(31, 29),
+(32, 30);

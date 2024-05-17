@@ -13,7 +13,7 @@ class CustomerEntity extends Equatable {
   final String? occupation;
   final String? phone;
   final String? mobile;
-  final AddressEntity? address;
+  final AddressEntity address;
 
   const CustomerEntity({
     required this.id,
@@ -25,7 +25,7 @@ class CustomerEntity extends Equatable {
     this.occupation,
     this.phone,
     this.mobile,
-    this.address
+    required this.address
   });
 
   @override

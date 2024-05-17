@@ -61,7 +61,10 @@ class Database {
         authors.title AS author_title
       FROM books 
       LEFT JOIN publishers ON books.publisher_id = publishers.id
-      LEFT JOIN authors ON books.author_id = authors.id
+      LEFT JOIN book_authors ON books.id = book_authors.book_id
+      LEFT JOIN authors ON book_authors.author_id = authors.id
+      LEFT JOIN book_categories ON books.id = book_categories.book_id
+      LEFT JOIN categories ON book_categories.category_id = categories.id
       ORDER BY books.title
       LIMIT ${(currentPage - 1) * NetworkConstants.pageSize}, ${ NetworkConstants.pageSize };
     ''';

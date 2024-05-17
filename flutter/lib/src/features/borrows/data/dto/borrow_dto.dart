@@ -10,8 +10,8 @@ class BorrowDto extends BorrowEntity {
     required super.id,
     required super.createdAt,
     required super.updatedAt,
-    super.book,
-    super.customer,
+    required super.book,
+    required super.customer,
     required super.endDate,
     super.status
   });

@@ -22,4 +22,8 @@ class AuthorDto extends AuthorEntity {
       title: json['author_title'] as String?
     );
   }
+
+  static List<AuthorDto> listFromJsonList(List<Json> jsonList) {
+    return jsonList.map((Json json) => AuthorDto.fromJson(json)).toList();
+  }
 }

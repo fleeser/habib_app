@@ -27,8 +27,8 @@ class BorrowEntity extends Equatable {
   final int id;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final BookEntity? book;
-  final CustomerEntity? customer;
+  final BookEntity book;
+  final CustomerEntity customer;
   final DateTime endDate;
   final BorrowStatus? status;
 
@@ -36,8 +36,8 @@ class BorrowEntity extends Equatable {
     required this.id,
     required this.createdAt,
     required this.updatedAt,
-    this.book,
-    this.customer,
+    required this.book,
+    required this.customer,
     required this.endDate,
     this.status
   });

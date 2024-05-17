@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:habib_app/src/features/books/domain/entities/author_entity.dart';
+import 'package:habib_app/src/features/books/domain/entities/category_entity.dart';
 import 'package:habib_app/src/features/books/domain/entities/publisher_entity.dart';
 
 class BookEntity extends Equatable {
@@ -13,8 +14,9 @@ class BookEntity extends Equatable {
   final String? isbn13;
   final int? edition;
   final DateTime? publishDate;
-  final PublisherEntity? publisher;
-  final AuthorEntity? author;
+  final PublisherEntity publisher;
+  final List<AuthorEntity> authors;
+  final List<CategoryEntity> categories;
   final bool? bought;
 
   const BookEntity({
@@ -26,8 +28,9 @@ class BookEntity extends Equatable {
     this.isbn13,
     this.edition,
     this.publishDate,
-    this.publisher,
-    this.author,
+    required this.publisher,
+    required this.authors,
+    required this.categories,
     this.bought
   });
 
@@ -42,7 +45,8 @@ class BookEntity extends Equatable {
     edition,
     publishDate,
     publisher,
-    author,
+    authors,
+    categories,
     bought
   ];
 }

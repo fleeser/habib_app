@@ -18,4 +18,8 @@ class CategoryDto extends CategoryEntity {
       name: json['category_name'] as String
     );
   }
+
+  static List<CategoryDto> listFromJsonList(List<Json> jsonList) {
+    return jsonList.map((Json json) => CategoryDto.fromJson(json)).toList();
+  }
 }

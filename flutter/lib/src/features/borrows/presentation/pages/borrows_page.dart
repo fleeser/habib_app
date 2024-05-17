@@ -156,8 +156,8 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
                 final BorrowEntity borrow = pageState.borrows[index];
                 return [
                   borrow.id.toString(),
-                  '${borrow.customer?.firstName ?? 'Unbekannt'} ${borrow.customer?.lastName ?? 'Unbekannt'}',
-                  borrow.book?.title ?? 'Unbekannt'
+                  '${ borrow.customer.firstName } ${ borrow.customer.lastName }',
+                  borrow.book.title
                 ];
               }),
               text: _tableText
