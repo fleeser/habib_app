@@ -1,3 +1,7 @@
+CREATE DATABASE public;
+
+USE public;
+
 CREATE TABLE addresses (
     id                  MEDIUMINT NOT NULL AUTO_INCREMENT,
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
