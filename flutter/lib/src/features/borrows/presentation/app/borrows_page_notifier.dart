@@ -70,7 +70,7 @@ class BorrowsPageNotifier extends _$BorrowsPageNotifier {
     return const BorrowsPageState();
   }
 
-  Future<void> fetchNextPage() async {
+  Future<void> fetchNextPage(String searchText) async {
     if (state.status == BorrowsPageStatus.loading) return;
     if (state.hasReachedEnd) return;
 
@@ -79,7 +79,10 @@ class BorrowsPageNotifier extends _$BorrowsPageNotifier {
       removeException: true
     );
 
-    final BorrowGetBorrowsUsecaseParams params = BorrowGetBorrowsUsecaseParams(currentPage: state.currentPage);
+    final BorrowGetBorrowsUsecaseParams params = BorrowGetBorrowsUsecaseParams(
+      searchText: searchText,
+      currentPage: state.currentPage
+    );
     final Result<List<BorrowEntity>> result = await _borrowGetBorrowsUsecase.call(params);
     
     result.fold(
@@ -101,5 +104,10 @@ class BorrowsPageNotifier extends _$BorrowsPageNotifier {
         );
       }
     );
+  }
+
+  Future<void> refresh(String searchText) async {
+    state = const BorrowsPageState();
+    await fetchNextPage(searchText);
   }
 }

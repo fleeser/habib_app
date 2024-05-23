@@ -16,5 +16,5 @@ CustomerRepository customerRepository(CustomerRepositoryRef ref) {
 
 abstract interface class CustomerRepository {
 
-  ResultFuture<List<CustomerEntity>> getCustomers({ required int currentPage });
+  ResultFuture<List<CustomerEntity>> getCustomers({ required String searchText, required int currentPage });
 }

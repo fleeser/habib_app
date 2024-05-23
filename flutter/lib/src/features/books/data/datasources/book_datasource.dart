@@ -17,5 +17,5 @@ abstract interface class BookDatasource {
 
   const BookDatasource();
 
-  Future<List<BookDto>> getBooks({ required int currentPage });
+  Future<List<BookDto>> getBooks({ required String searchText, required int currentPage });
 }

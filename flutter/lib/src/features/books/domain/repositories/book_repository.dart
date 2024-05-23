@@ -16,5 +16,5 @@ BookRepository bookRepository(BookRepositoryRef ref) {
 
 abstract interface class BookRepository {
 
-  ResultFuture<List<BookEntity>> getBooks({ required int currentPage });
+  ResultFuture<List<BookEntity>> getBooks({ required String searchText, required int currentPage });
 }

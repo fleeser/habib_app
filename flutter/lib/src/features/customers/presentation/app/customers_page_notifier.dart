@@ -71,7 +71,7 @@ class CustomersPageNotifier extends _$CustomersPageNotifier {
     return const CustomersPageState();
   }
 
-  Future<void> fetchNextPage() async {
+  Future<void> fetchNextPage(String searchText) async {
     if (state.status == CustomersPageStatus.loading) return;
     if (state.hasReachedEnd) return;
 
@@ -80,7 +80,10 @@ class CustomersPageNotifier extends _$CustomersPageNotifier {
       removeException: true
     );
 
-    final CustomerGetCustomersUsecaseParams params = CustomerGetCustomersUsecaseParams(currentPage: state.currentPage);
+    final CustomerGetCustomersUsecaseParams params = CustomerGetCustomersUsecaseParams(
+      searchText: searchText,
+      currentPage: state.currentPage
+    );
     final Result<List<CustomerEntity>> result = await _customerGetCustomersUsecase.call(params);
     
     result.fold(
@@ -102,5 +105,10 @@ class CustomersPageNotifier extends _$CustomersPageNotifier {
         );
       }
     );
+  }
+  
+  Future<void> refresh(String searchText) async {
+    state = const CustomersPageState();
+    await fetchNextPage(searchText);
   }
 }

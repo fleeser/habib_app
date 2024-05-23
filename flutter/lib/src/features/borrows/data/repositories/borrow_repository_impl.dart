@@ -14,9 +14,12 @@ class BorrowRepositoryImpl implements BorrowRepository {
   })  : _borrowDatasource = borrowDatasource;
 
   @override
-  ResultFuture<List<BorrowEntity>> getBorrows({ required int currentPage }) async {
+  ResultFuture<List<BorrowEntity>> getBorrows({ required String searchText, required int currentPage }) async {
     try {
-      final List<BorrowDto> result = await _borrowDatasource.getBorrows(currentPage: currentPage);
+      final List<BorrowDto> result = await _borrowDatasource.getBorrows(
+        searchText: searchText,
+        currentPage: currentPage
+      );
       return Success(result);
     } on Exception catch (e) {
       return Failure(e);

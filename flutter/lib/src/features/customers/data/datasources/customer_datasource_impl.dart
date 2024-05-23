@@ -12,8 +12,11 @@ class CustomerDatasourceImpl implements CustomerDatasource {
   })  : _database = database;
 
   @override
-  Future<List<CustomerDto>> getCustomers({ required int currentPage }) async {
-    final List<Json> jsonList = await _database.getCustomers(currentPage: currentPage);
+  Future<List<CustomerDto>> getCustomers({ required String searchText, required int currentPage }) async {
+    final List<Json> jsonList = await _database.getCustomers(
+      searchText: searchText, 
+      currentPage: currentPage
+    );
     return CustomerDto.listFromJsonList(jsonList);
   }
 }

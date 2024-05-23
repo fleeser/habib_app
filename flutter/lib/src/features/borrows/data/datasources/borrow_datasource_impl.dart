@@ -12,8 +12,11 @@ class BorrowDatasourceImpl implements BorrowDatasource {
   })  : _database = database;
 
   @override
-  Future<List<BorrowDto>> getBorrows({ required int currentPage }) async {
-    final List<Json> jsonList = await _database.getBorrows(currentPage: currentPage);
+  Future<List<BorrowDto>> getBorrows({ required String searchText, required int currentPage }) async {
+    final List<Json> jsonList = await _database.getBorrows(
+      searchText: searchText,
+      currentPage: currentPage
+    );
     return BorrowDto.listFromJsonList(jsonList);
   }
 }

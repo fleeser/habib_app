@@ -77,30 +77,28 @@ CREATE TABLE borrows (
     book_id             MEDIUMINT NOT NULL,
     customer_id         MEDIUMINT NOT NULL,
     end_date            DATE NOT NULL,
-    status              ENUM('borrowed', 'returned', 'exceeded', 'warned'),
+    status              ENUM('borrowed', 'returned', 'warned') NOT NULL,
     CONSTRAINT pk_borrow_id PRIMARY KEY (id),
     CONSTRAINT fk_borrows_book_id FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_borrows_customer_id FOREIGN KEY (customer_id) REFERENCES customers(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE book_authors (
-    id                  MEDIUMINT NOT NULL AUTO_INCREMENT,
-    created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     book_id             MEDIUMINT NOT NULL,
     author_id           MEDIUMINT NOT NULL,
-    CONSTRAINT pk_book_authors_id PRIMARY KEY (id),
+    created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT pk_book_authors_book_id_author_id PRIMARY KEY (book_id, author_id),
     CONSTRAINT fk_book_authors_book_id FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_book_authors_author_id FOREIGN KEY (author_id) REFERENCES authors(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE book_categories (
-    id                  MEDIUMINT NOT NULL AUTO_INCREMENT,
-    created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     book_id             MEDIUMINT NOT NULL,
     category_id         MEDIUMINT NOT NULL,
-    CONSTRAINT pk_book_categories_id PRIMARY KEY (id),
+    created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT pk_book_categories_book_id_category_id PRIMARY KEY (book_id, category_id),
     CONSTRAINT fk_book_categories_book_id FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_book_categories_category_id FOREIGN KEY (category_id) REFERENCES categories(id) ON UPDATE CASCADE ON DELETE CASCADE
 );

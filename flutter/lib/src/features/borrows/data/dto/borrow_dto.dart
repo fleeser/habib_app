@@ -1,30 +1,28 @@
+import 'dart:convert';
+
+import 'package:habib_app/core/utils/enums/borrow_status.dart';
 import 'package:habib_app/core/utils/typedefs.dart';
-import 'package:habib_app/src/features/books/data/dto/book_dto.dart';
+import 'package:habib_app/src/features/borrows/data/dto/borrow_book_dto.dart';
+import 'package:habib_app/src/features/borrows/data/dto/borrow_customer_dto.dart';
 import 'package:habib_app/src/features/borrows/domain/entities/borrow_entity.dart';
-import 'package:habib_app/src/features/customers/data/dto/customer_dto.dart';
-import 'package:habib_app/core/extensions/generic_extension.dart';
 
 class BorrowDto extends BorrowEntity {
 
   const BorrowDto({
     required super.id,
-    required super.createdAt,
-    required super.updatedAt,
     required super.book,
     required super.customer,
     required super.endDate,
-    super.status
+    required super.status
   });
 
-  factory BorrowDto.fromJson(Json json) {
+  factory BorrowDto.fromJson(Json borrowJson) {
     return BorrowDto(
-      id: json['id'] as int,
-      createdAt: json['borrow_created_at'] as DateTime,
-      updatedAt: json['borrow_updated_at'] as DateTime,
-      book: BookDto.fromJson(json),
-      customer: CustomerDto.fromJson(json),
-      endDate: json['end_date'] as DateTime,
-      status: (json['status'] as String?).whenNotNull<BorrowStatus>((String databaseStatus) => BorrowStatus.fromDatabaseString(databaseStatus))
+      id: borrowJson['borrow_id'] as int,
+      book: BorrowBookDto.fromJson(json.decode(borrowJson['book'] as String)),
+      customer: BorrowCustomerDto.fromJson(json.decode(borrowJson['customer'] as String)),
+      endDate: borrowJson['borrow_end_date'] as DateTime,
+      status: BorrowStatus.fromDatabaseValue(borrowJson['borrow_status'] as String)
     );
   }
 

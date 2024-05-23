@@ -14,9 +14,12 @@ class CustomerRepositoryImpl implements CustomerRepository {
   })  : _customerDatasource = customerDatasource;
 
   @override
-  ResultFuture<List<CustomerEntity>> getCustomers({ required int currentPage }) async {
+  ResultFuture<List<CustomerEntity>> getCustomers({ required String searchText, required int currentPage }) async {
     try {
-      final List<CustomerDto> result = await _customerDatasource.getCustomers(currentPage: currentPage);
+      final List<CustomerDto> result = await _customerDatasource.getCustomers(
+        searchText: searchText,
+        currentPage: currentPage
+      );
       return Success(result);
     } on Exception catch (e) {
       return Failure(e);

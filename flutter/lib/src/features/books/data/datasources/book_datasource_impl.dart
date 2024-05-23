@@ -12,8 +12,11 @@ class BookDatasourceImpl implements BookDatasource {
   })  : _database = database;
 
   @override
-  Future<List<BookDto>> getBooks({ required int currentPage }) async {
-    final List<Json> jsonList = await _database.getBooks(currentPage: currentPage);
+  Future<List<BookDto>> getBooks({ required String searchText, required int currentPage }) async {
+    final List<Json> jsonList = await _database.getBooks(
+      searchText: searchText,
+      currentPage: currentPage
+    );
     return BookDto.listFromJsonList(jsonList);
   }
 }

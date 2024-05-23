@@ -25,15 +25,22 @@ class BorrowGetBorrowsUsecase extends UsecaseWithParams<List<BorrowEntity>, Borr
 
   @override
   ResultFuture<List<BorrowEntity>> call(BorrowGetBorrowsUsecaseParams params) async {
-    return await _borrowRepository.getBorrows(currentPage: params.currentPage);
+    return await _borrowRepository.getBorrows(
+      searchText: params.searchText,
+      currentPage: params.currentPage
+    );
   }
 }
 
 class BorrowGetBorrowsUsecaseParams extends Equatable {
 
+  final String searchText;
   final int currentPage;
 
-  const BorrowGetBorrowsUsecaseParams({ required this.currentPage });
+  const BorrowGetBorrowsUsecaseParams({ 
+    required this.searchText,
+    required this.currentPage 
+  });
 
   @override
   List<Object?> get props => [

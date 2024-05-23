@@ -14,9 +14,12 @@ class BookRepositoryImpl implements BookRepository {
   })  : _bookDatasource = bookDatasource;
 
   @override
-  ResultFuture<List<BookEntity>> getBooks({ required int currentPage }) async {
+  ResultFuture<List<BookEntity>> getBooks({ required String searchText, required int currentPage }) async {
     try {
-      final List<BookDto> result = await _bookDatasource.getBooks(currentPage: currentPage);
+      final List<BookDto> result = await _bookDatasource.getBooks(
+        searchText: searchText,
+        currentPage: currentPage
+      );
       return Success(result);
     } on Exception catch (e) {
       return Failure(e);

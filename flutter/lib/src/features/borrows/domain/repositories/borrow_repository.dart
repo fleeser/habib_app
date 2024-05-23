@@ -16,5 +16,5 @@ BorrowRepository borrowRepository(BorrowRepositoryRef ref) {
 
 abstract interface class BorrowRepository {
 
-  ResultFuture<List<BorrowEntity>> getBorrows({ required int currentPage });
+  ResultFuture<List<BorrowEntity>> getBorrows({ required String searchText, required int currentPage });
 }

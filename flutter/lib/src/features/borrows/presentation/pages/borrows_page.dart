@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:habib_app/core/common/widgets/hb_chip.dart';
+import 'package:habib_app/core/extensions/datetime_extension.dart';
 import 'package:habib_app/core/common/widgets/hb_table.dart';
 import 'package:habib_app/core/extensions/exception_extension.dart';
 import 'package:habib_app/core/utils/enums/toast_type.dart';
@@ -19,7 +22,7 @@ import 'package:habib_app/core/utils/core_utils.dart';
 import 'package:habib_app/src/features/borrows/domain/entities/borrow_entity.dart';
 import 'package:habib_app/src/features/borrows/presentation/app/borrows_page_notifier.dart';
 
-class BorrowsPage extends ConsumerStatefulWidget {
+class BorrowsPage extends StatefulHookConsumerWidget {
 
   const BorrowsPage({ super.key });
 
@@ -30,6 +33,8 @@ class BorrowsPage extends ConsumerStatefulWidget {
 class _BorrowsPageState extends ConsumerState<BorrowsPage> {
 
   final ScrollController _scrollController = ScrollController();
+
+  late TextEditingController _searchController;
 
   void _onPageStateUpdate(BorrowsPageState? _, BorrowsPageState next) {
     if (next.exception != null) {
@@ -51,7 +56,7 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
 
   void _onScroll() {
     if (_isBottom) {
-      ref.read(borrowsPageNotifierProvider.notifier).fetchNextPage();
+      ref.read(borrowsPageNotifierProvider.notifier).fetchNextPage(_searchText);
     }
   }
 
@@ -69,12 +74,24 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
     return null;
   }
 
+  String get _searchText {
+    return _searchController.text.trim();
+  }
+
   Future<void> _onBorrowPressed(int borrowId) async {
     await BorrowDetailsRoute(borrowId: borrowId).push(context);
   }
 
   Future<void> _onCreateBorrow() async {
     await const CreateBorrowRoute().push(context);
+  }
+
+  Future<void> _onSearchChanged() async {
+    await ref.read(borrowsPageNotifierProvider.notifier).refresh(_searchText);
+  }
+
+  Future<void> _onRefresh() async {
+    await ref.read(borrowsPageNotifierProvider.notifier).refresh(_searchText);
   }
 
   @override
@@ -84,7 +101,7 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
     _scrollController.addListener(_onScroll);
 
     CoreUtils.postFrameCall(() {
-      ref.read(borrowsPageNotifierProvider.notifier).fetchNextPage();
+      ref.read(borrowsPageNotifierProvider.notifier).fetchNextPage(_searchText);
     });
   }
 
@@ -101,6 +118,8 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
   Widget build(BuildContext context) {
 
     final BorrowsPageState pageState = ref.watch(borrowsPageNotifierProvider);
+
+    _searchController = useTextEditingController();
 
     ref.listen<BorrowsPageState>(
       borrowsPageNotifierProvider,
@@ -122,7 +141,9 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
             ),
             child: Row(
               children: [
-                const HBTextField(
+                HBTextField(
+                  controller: _searchController,
+                  onChanged: (String _) => _onSearchChanged,
                   icon: HBIcons.magnifyingGlass,
                   hint: 'Buchtitel oder Kundenname',
                   maxWidth: 500.0
@@ -133,6 +154,11 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
                   onPressed: _onCreateBorrow,
                   icon: HBIcons.plus,
                   title: 'Neue Ausleihe'
+                ),
+                const HBGap.md(),
+                HBButton.shrinkFill(
+                  onPressed: _onRefresh,
+                  icon: HBIcons.arrowPath
                 )
               ]
             )
@@ -149,15 +175,21 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
               ),
               controller: _scrollController,
               tableWidth: context.width - HBUIConstants.navigationRailWidth - context.rightPadding - 4.0 * HBSpacing.lg,
-              columnLength: 2,
-              fractions: const [ 0.1, 0.45, 0.45 ],
-              titles: const [ 'ID', 'Kundenname', 'Buchtitel' ],
+              columnLength: 4,
+              fractions: const [ 0.35, 0.35, 0.15, 0.15 ],
+              titles: const [ 'Kundenname', 'Buchtitel (Auflage)', 'Rückgabedatum', 'Status' ],
               items: List.generate(pageState.borrows.length, (int index) {
                 final BorrowEntity borrow = pageState.borrows[index];
                 return [
-                  borrow.id.toString(),
-                  '${ borrow.customer.firstName } ${ borrow.customer.lastName }',
-                  borrow.book.title
+                  HBTableText(text: '${ borrow.customer.title != null ? '${ borrow.customer.title } ' : '' }${ borrow.customer.firstName } ${ borrow.customer.lastName }'),
+                  HBTableText(text: '${ borrow.book.title }${ borrow.book.edition != null ? ' (${ borrow.book.edition }. Auflage)' : '' }'),
+                  HBTableText(text: borrow.endDate.toHumanReadable()),
+                  HBTableChip(
+                    chip: HBChip(
+                      text: borrow.status.title, 
+                      color: borrow.status.color
+                    )
+                  )
                 ];
               }),
               text: _tableText

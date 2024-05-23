@@ -36,35 +36,48 @@ class Database {
     required MySqlConnection connection
   }) : _connection = connection;
 
-  Future<List<Json>> getBooks({ required int currentPage }) async {
+  Future<List<Json>> getBooks({ required String searchText, required int currentPage }) async {
     String query = '''
       SELECT
         books.id AS book_id,
-        books.created_at AS book_created_at,
-        books.updated_at AS book_updated_at,
         books.title AS book_title,
         books.isbn_10 AS book_isbn_10,
         books.isbn_13 AS book_isbn_13,
         books.edition AS book_edition,
-        books.publish_date AS book_publish_date,
-        books.bought AS book_bought,
-        publishers.id AS publisher_id,
-        publishers.created_at AS publisher_created_at,
-        publishers.updated_at AS publisher_updated_at,
-        publishers.name AS publisher_name,
-        publishers.city AS publisher_city,
-        authors.id AS author_id,
-        authors.created_at AS author_created_at,
-        authors.updated_at AS author_updated_at,
-        authors.first_name AS author_first_name,
-        authors.last_name AS author_last_name,
-        authors.title AS author_title
-      FROM books 
-      LEFT JOIN publishers ON books.publisher_id = publishers.id
-      LEFT JOIN book_authors ON books.id = book_authors.book_id
-      LEFT JOIN authors ON book_authors.author_id = authors.id
-      LEFT JOIN book_categories ON books.id = book_categories.book_id
-      LEFT JOIN categories ON book_categories.category_id = categories.id
+        (
+          SELECT JSON_ARRAYAGG(
+            JSON_OBJECT(
+              'author_id', authors.id,
+              'author_first_name', authors.first_name,
+              'author_last_name', authors.last_name,
+              'author_title', authors.title
+            )
+          )
+          FROM authors
+          INNER JOIN book_authors ON authors.id = book_authors.author_id
+          WHERE book_authors.book_id = books.id
+        ) AS authors,
+        (
+          SELECT JSON_ARRAYAGG(
+            JSON_OBJECT(
+              'category_id', categories.id,
+              'category_name', categories.name
+            )
+          )
+          FROM categories
+          INNER JOIN book_categories ON categories.id = book_categories.category_id
+          WHERE book_categories.book_id = books.id
+        ) AS categories,
+        (
+          CASE
+            WHEN EXISTS (SELECT 1 FROM borrows WHERE borrows.book_id = books.id AND borrows.status <> 'returned') THEN 0
+            ELSE 1
+          END
+        ) AS book_status
+      FROM books
+      WHERE (
+        ${ searchText.isEmpty ? '1 = 1' : "books.title LIKE '%$searchText%'" }
+      )
       ORDER BY books.title
       LIMIT ${(currentPage - 1) * NetworkConstants.pageSize}, ${ NetworkConstants.pageSize };
     ''';
@@ -72,26 +85,28 @@ class Database {
     return results.toJsonList();
   }
 
-  Future<List<Json>> getCustomers({ required int currentPage }) async {
+  Future<List<Json>> getCustomers({ required String searchText, required int currentPage }) async {
     String query = '''
       SELECT
         customers.id AS customer_id,
-        customers.created_at AS customer_created_at,
-        customers.updated_at AS customer_updated_at,
         customers.first_name AS customer_first_name,
         customers.last_name AS customer_last_name,
         customers.title AS customer_title,
-        customers.occupation AS customer_occupation,
         customers.phone AS customer_phone,
         customers.mobile AS customer_mobile,
-        addresses.id AS address_id,
-        addresses.created_at AS address_created_at,
-        addresses.updated_at AS address_updated_at,
-        addresses.city AS address_city,
-        addresses.postal_code AS address_postal_code,
-        addresses.street AS address_street
+        (
+          JSON_OBJECT(
+            'address_id', addresses.id,
+            'address_city', addresses.city,
+            'address_postal_code', addresses.postal_code,
+            'address_street', addresses.street
+          )
+        ) AS address
       FROM customers 
-      LEFT JOIN addresses ON customers.address_id = addresses.id
+      INNER JOIN addresses ON customers.address_id = addresses.id
+      WHERE (
+        ${ searchText.isEmpty ? '1 = 1' : "customers.first_name LIKE '%$searchText%'" }
+      )
       ORDER BY customers.last_name
       LIMIT ${(currentPage - 1) * NetworkConstants.pageSize}, ${ NetworkConstants.pageSize };
     ''';
@@ -99,55 +114,38 @@ class Database {
     return results.toJsonList();
   }
 
-  Future<List<Json>> getBorrows({ required int currentPage }) async {
+  Future<List<Json>> getBorrows({ required String searchText, required int currentPage }) async {
     String query = '''
       SELECT
         borrows.id AS borrow_id,
-        borrows.created_at AS borrow_created_at,
-        borrows.updated_at AS borrow_updated_at,
         borrows.end_date AS borrow_end_date,
-        borrows.status AS borrow_status,
-        books.id AS book_id,
-        books.created_at AS book_created_at,
-        books.updated_at AS book_updated_at,
-        books.title AS book_title,
-        books.isbn_10 AS book_isbn_10,
-        books.isbn_13 AS book_isbn_13,
-        books.edition AS book_edition,
-        books.publish_date AS book_publish_date,
-        books.bought AS book_bought,
-        publishers.id AS publisher_id,
-        publishers.created_at AS publisher_created_at,
-        publishers.updated_at AS publisher_updated_at,
-        publishers.name AS publisher_name,
-        publishers.city AS publisher_city,
-        authors.id AS author_id,
-        authors.created_at AS author_created_at,
-        authors.updated_at AS author_updated_at,
-        authors.first_name AS author_first_name,
-        authors.last_name AS author_last_name,
-        authors.title AS author_title,
-        customers.id AS customer_id,
-        customers.created_at AS customer_created_at,
-        customers.updated_at AS customer_updated_at,
-        customers.first_name AS customer_first_name,
-        customers.last_name AS customer_last_name,
-        customers.title AS customer_title,
-        customers.occupation AS customer_occupation,
-        customers.phone AS customer_phone,
-        customers.mobile AS customer_mobile,
-        addresses.id AS address_id,
-        addresses.created_at AS address_created_at,
-        addresses.updated_at AS address_updated_at,
-        addresses.city AS address_city,
-        addresses.postal_code AS address_postal_code,
-        addresses.street AS address_street
+        (
+          CASE
+            WHEN borrows.status = 'borrowed' AND borrows.end_date < CURRENT_DATE THEN 'exceeded'
+            ELSE borrows.status
+          END
+        ) AS borrow_status,
+        (
+          JSON_OBJECT(
+            'book_id', books.id,
+            'book_title', books.title,
+            'book_edition', books.edition
+          )
+        ) AS book,
+        (
+          JSON_OBJECT(
+            'customer_id', customers.id,
+            'customer_first_name', customers.first_name,
+            'customer_last_name', customers.last_name,
+            'customer_title', customers.title
+          )
+        ) AS customer
       FROM borrows
-      LEFT JOIN books ON borrows.book_id = books.id
-      LEFT JOIN customers ON borrows.customer_id = customers.id
-      LEFT JOIN publishers ON books.publisher_id = publishers.id
-      LEFT JOIN authors ON books.author_id = authors.id
-      LEFT JOIN addresses ON customers.address_id = addresses.id
+      INNER JOIN books ON borrows.book_id = books.id
+      INNER JOIN customers ON borrows.customer_id = customers.id
+      WHERE (
+        ${ searchText.isEmpty ? '1 = 1' : "customers.first_name LIKE '%$searchText%'" }
+      )
       ORDER BY borrows.created_at
       LIMIT ${(currentPage - 1) * NetworkConstants.pageSize}, ${ NetworkConstants.pageSize };
     ''';

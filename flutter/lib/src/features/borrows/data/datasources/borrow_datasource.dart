@@ -17,5 +17,5 @@ abstract interface class BorrowDatasource {
 
   const BorrowDatasource();
 
-  Future<List<BorrowDto>> getBorrows({ required int currentPage });
+  Future<List<BorrowDto>> getBorrows({ required String searchText, required int currentPage });
 }

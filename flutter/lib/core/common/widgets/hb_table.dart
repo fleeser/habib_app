@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_conditional/flutter_conditional.dart';
+import 'package:habib_app/core/common/widgets/hb_chip.dart';
 
 import 'package:habib_app/core/res/theme/colors/hb_colors.dart';
 import 'package:habib_app/core/res/theme/spacing/hb_spacing.dart';
@@ -22,7 +23,7 @@ class HBTable extends StatelessWidget {
   final int columnLength;
   final List<double> fractions;
   final List<String> titles;
-  final List<List<String>> items;
+  final List<List<HBTableItem>> items;
   final String? text;
   final void Function(int index)? onPressed;
 
@@ -82,10 +83,15 @@ class HBTable extends StatelessWidget {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(HBUIConstants.defaultBorderRadius)),
                         child: Row(
                           children: List.generate(columnLength, (int columnIndex) {
-                            return HBTableText(
-                              width: tableWidth * fractions[columnIndex],
-                              text: items[rowIndex][columnIndex]
-                            );
+                            final HBTableItem item = items[rowIndex][columnIndex];
+                            
+                            return switch (item.type) {
+                              HBTableItemType.text => SizedBox(
+                                width: tableWidth * fractions[columnIndex],
+                                child: item
+                              ),
+                              HBTableItemType.chip => item
+                            };
                           })
                         )
                       )
@@ -144,31 +150,61 @@ class HBTableTitle extends StatelessWidget {
   }
 }
 
-class HBTableText extends StatelessWidget {
+enum HBTableItemType {
+  text,
+  chip
+}
 
-  final double width;
+class HBTableItem extends StatelessWidget {
+
+  final HBTableItemType type;
+
+  const HBTableItem({
+    super.key,
+    required this.type
+  });
+  
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
+  }
+}
+
+class HBTableText extends HBTableItem {
+
   final String text;
 
   const HBTableText({
     super.key,
-    required this.width,
     required this.text
-  });
+  }) : super(type: HBTableItemType.text);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: Text(
-        text,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: HBTypography.base.copyWith(
-          fontSize: 14.0,
-          fontWeight: FontWeight.w400,
-          color: HBColors.gray900
-        )
+    return Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: HBTypography.base.copyWith(
+        fontSize: 14.0,
+        fontWeight: FontWeight.w400,
+        color: HBColors.gray900
       )
     );
+  }
+}
+
+class HBTableChip extends HBTableItem {
+
+  final HBChip chip;
+
+  const HBTableChip({ 
+    super.key,
+    required this.chip
+  }) : super(type: HBTableItemType.chip);
+
+  @override
+  Widget build(BuildContext context) {
+    return chip;
   }
 }

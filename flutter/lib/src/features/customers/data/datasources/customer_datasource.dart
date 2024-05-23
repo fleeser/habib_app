@@ -17,5 +17,5 @@ abstract interface class CustomerDatasource {
 
   const CustomerDatasource();
 
-  Future<List<CustomerDto>> getCustomers({ required int currentPage });
+  Future<List<CustomerDto>> getCustomers({ required String searchText, required int currentPage });
 }

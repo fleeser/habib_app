@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:habib_app/core/common/widgets/hb_chip.dart';
+import 'package:habib_app/src/features/books/domain/entities/author_entity.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:habib_app/src/features/books/domain/entities/book_entity.dart';
@@ -19,7 +22,7 @@ import 'package:habib_app/core/utils/constants/hb_ui_constants.dart';
 import 'package:habib_app/core/utils/core_utils.dart';
 import 'package:habib_app/src/features/books/presentation/app/books_page_notifier.dart';
 
-class BooksPage extends ConsumerStatefulWidget {
+class BooksPage extends StatefulHookConsumerWidget {
 
   const BooksPage({ super.key });
 
@@ -30,6 +33,8 @@ class BooksPage extends ConsumerStatefulWidget {
 class _BooksPageState extends ConsumerState<BooksPage> {
 
   final ScrollController _scrollController = ScrollController();
+
+  late TextEditingController _searchController;
 
   void _onPageStateUpdate(BooksPageState? _, BooksPageState next) {
     if (next.exception != null) {
@@ -51,7 +56,7 @@ class _BooksPageState extends ConsumerState<BooksPage> {
 
   void _onScroll() {
     if (_isBottom) {
-      ref.read(booksPageNotifierProvider.notifier).fetchNextPage();
+      ref.read(booksPageNotifierProvider.notifier).fetchNextPage(_searchText);
     }
   }
 
@@ -69,12 +74,24 @@ class _BooksPageState extends ConsumerState<BooksPage> {
     return null;
   }
 
+  String get _searchText {
+    return _searchController.text.trim();
+  }
+
   Future<void> _onBookPressed(int bookId) async {
     await BookDetailsRoute(bookId: bookId).push(context);
   }
 
   Future<void> _onCreateBook() async {
     await const CreateBookRoute().push(context);
+  }
+
+  Future<void> _onSearchChanged() async {
+    await ref.read(booksPageNotifierProvider.notifier).refresh(_searchText);
+  }
+
+  Future<void> _onRefresh() async {
+    await ref.read(booksPageNotifierProvider.notifier).refresh(_searchText);
   }
 
   @override
@@ -84,7 +101,7 @@ class _BooksPageState extends ConsumerState<BooksPage> {
     _scrollController.addListener(_onScroll);
 
     CoreUtils.postFrameCall(() {
-      ref.read(booksPageNotifierProvider.notifier).fetchNextPage();
+      ref.read(booksPageNotifierProvider.notifier).fetchNextPage(_searchText);
     });
   }
 
@@ -101,6 +118,8 @@ class _BooksPageState extends ConsumerState<BooksPage> {
   Widget build(BuildContext context) {
 
     final BooksPageState pageState = ref.watch(booksPageNotifierProvider);
+
+    _searchController = useTextEditingController();
 
     ref.listen<BooksPageState>(
       booksPageNotifierProvider,
@@ -122,7 +141,9 @@ class _BooksPageState extends ConsumerState<BooksPage> {
             ),
             child: Row(
               children: [
-                const HBTextField(
+                HBTextField(
+                  controller: _searchController,
+                  onChanged: (String _) => _onSearchChanged,
                   icon: HBIcons.magnifyingGlass,
                   hint: 'Buchtitel oder ISBN',
                   maxWidth: 500.0
@@ -133,6 +154,11 @@ class _BooksPageState extends ConsumerState<BooksPage> {
                   onPressed: _onCreateBook,
                   icon: HBIcons.plus,
                   title: 'Neues Buch'
+                ),
+                const HBGap.md(),
+                HBButton.shrinkFill(
+                  onPressed: _onRefresh,
+                  icon: HBIcons.arrowPath
                 )
               ]
             )
@@ -149,14 +175,22 @@ class _BooksPageState extends ConsumerState<BooksPage> {
               ),
               controller: _scrollController,
               tableWidth: context.width - HBUIConstants.navigationRailWidth - context.rightPadding - 4.0 * HBSpacing.lg,
-              columnLength: 2,
-              fractions: const [ 0.1, 0.9 ],
-              titles: const [ 'ID', 'Titel' ],
+              columnLength: 5,
+              fractions: const [ 0.3, 0.2, 0.2, 0.2, 0.1 ],
+              titles: const [ 'Titel (Auflage)', 'Autor', 'ISBN 10', 'ISBN 13', 'Status' ],
               items: List.generate(pageState.books.length, (int index) {
                 final BookEntity book = pageState.books[index];
                 return [
-                  book.id.toString(),
-                  book.title
+                  HBTableText(text: '${ book.title }${ book.edition != null ? ' (${ book.edition }. Auflage)' : '' }'),
+                  HBTableText(text: (book.authors ?? []).map((AuthorEntity author) => '${ author.title != null ? '${ author.title } ' : '' } ${ author.firstName } ${ author.lastName }').join(', ')),
+                  HBTableText(text: book.isbn10 ?? ''),
+                  HBTableText(text: book.isbn13 ?? ''),
+                  HBTableChip(
+                    chip: HBChip(
+                      text: book.status.title, 
+                      color: book.status.color
+                    )
+                  )
                 ];
               }),
               text: _tableText

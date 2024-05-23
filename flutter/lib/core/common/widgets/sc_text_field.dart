@@ -17,6 +17,7 @@ class HBTextField extends StatelessWidget {
   final bool obscure;
   final bool isEnabled;
   final double? maxWidth;
+  final void Function(String)? onChanged;
 
   const HBTextField({
     super.key,
@@ -26,7 +27,8 @@ class HBTextField extends StatelessWidget {
     this.hint,
     this.obscure = false,
     this.isEnabled = true,
-    this.maxWidth
+    this.maxWidth,
+    this.onChanged
   });
 
   @override
@@ -35,6 +37,7 @@ class HBTextField extends StatelessWidget {
       constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
       child: TextField(
         controller: controller,
+        onChanged: onChanged,
         autocorrect: false,
         enabled: isEnabled,
         keyboardType: inputType,

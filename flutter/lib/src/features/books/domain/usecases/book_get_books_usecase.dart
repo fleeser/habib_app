@@ -25,18 +25,26 @@ class BookGetBooksUsecase extends UsecaseWithParams<List<BookEntity>, BookGetBoo
 
   @override
   ResultFuture<List<BookEntity>> call(BookGetBooksUsecaseParams params) async {
-    return await _bookRepository.getBooks(currentPage: params.currentPage);
+    return await _bookRepository.getBooks(
+      searchText: params.searchText,
+      currentPage: params.currentPage
+    );
   }
 }
 
 class BookGetBooksUsecaseParams extends Equatable {
 
+  final String searchText;
   final int currentPage;
 
-  const BookGetBooksUsecaseParams({ required this.currentPage });
+  const BookGetBooksUsecaseParams({ 
+    required this.searchText,
+    required this.currentPage 
+  });
 
   @override
   List<Object?> get props => [
+    searchText,
     currentPage
   ];
 }

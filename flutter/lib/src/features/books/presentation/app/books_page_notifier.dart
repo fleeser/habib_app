@@ -70,7 +70,7 @@ class BooksPageNotifier extends _$BooksPageNotifier {
     return const BooksPageState();
   }
 
-  Future<void> fetchNextPage() async {
+  Future<void> fetchNextPage(String searchText) async {
     if (state.status == BooksPageStatus.loading) return;
     if (state.hasReachedEnd) return;
 
@@ -79,7 +79,10 @@ class BooksPageNotifier extends _$BooksPageNotifier {
       removeException: true
     );
 
-    final BookGetBooksUsecaseParams params = BookGetBooksUsecaseParams(currentPage: state.currentPage);
+    final BookGetBooksUsecaseParams params = BookGetBooksUsecaseParams(
+      searchText: searchText,
+      currentPage: state.currentPage
+    );
     final Result<List<BookEntity>> result = await _bookGetBooksUsecase.call(params);
     
     result.fold(
@@ -101,5 +104,10 @@ class BooksPageNotifier extends _$BooksPageNotifier {
         );
       }
     );
+  }
+
+  Future<void> refresh(String searchText) async {
+    state = const BooksPageState();
+    await fetchNextPage(searchText);
   }
 }

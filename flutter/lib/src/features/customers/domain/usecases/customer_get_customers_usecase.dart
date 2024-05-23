@@ -25,18 +25,26 @@ class CustomerGetCustomersUsecase extends UsecaseWithParams<List<CustomerEntity>
 
   @override
   ResultFuture<List<CustomerEntity>> call(CustomerGetCustomersUsecaseParams params) async {
-    return await _customerRepository.getCustomers(currentPage: params.currentPage);
+    return await _customerRepository.getCustomers(
+      searchText: params.searchText,
+      currentPage: params.currentPage
+    );
   }
 }
 
 class CustomerGetCustomersUsecaseParams extends Equatable {
 
+  final String searchText;
   final int currentPage;
 
-  const CustomerGetCustomersUsecaseParams({ required this.currentPage });
+  const CustomerGetCustomersUsecaseParams({ 
+    required this.searchText,
+    required this.currentPage 
+  });
 
   @override
   List<Object?> get props => [
+    searchText,
     currentPage
   ];
 }

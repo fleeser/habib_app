@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:habib_app/core/common/widgets/hb_table.dart';
@@ -19,7 +20,7 @@ import 'package:habib_app/core/utils/enums/toast_type.dart';
 import 'package:habib_app/src/features/customers/domain/entities/customer_entity.dart';
 import 'package:habib_app/src/features/customers/presentation/app/customers_page_notifier.dart';
 
-class CustomersPage extends ConsumerStatefulWidget {
+class CustomersPage extends StatefulHookConsumerWidget {
 
   const CustomersPage({ super.key });
 
@@ -30,6 +31,8 @@ class CustomersPage extends ConsumerStatefulWidget {
 class _CustomersPageState extends ConsumerState<CustomersPage> {
 
   final ScrollController _scrollController = ScrollController();
+
+  late TextEditingController _searchController;
 
   void _onPageStateUpdate(CustomersPageState? _, CustomersPageState next) {
     if (next.exception != null) {
@@ -51,7 +54,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
 
   void _onScroll() {
     if (_isBottom) {
-      ref.read(customersPageNotifierProvider.notifier).fetchNextPage();
+      ref.read(customersPageNotifierProvider.notifier).fetchNextPage(_searchText);
     }
   }
 
@@ -69,12 +72,24 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
     return null;
   }
 
+  String get _searchText {
+    return _searchController.text.trim();
+  }
+
   Future<void> _onCustomerPressed(int customerId) async {
     await CustomerDetailsRoute(customerId: customerId).push(context);
   }
 
   Future<void> _onCreateCustomer() async {
     await const CreateCustomerRoute().push(context);
+  }
+
+  Future<void> _onSearchChanged() async {
+    await ref.read(customersPageNotifierProvider.notifier).refresh(_searchText);
+  }
+
+  Future<void> _onRefresh() async {
+    await ref.read(customersPageNotifierProvider.notifier).refresh(_searchText);
   }
 
   @override
@@ -84,7 +99,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
     _scrollController.addListener(_onScroll);
 
     CoreUtils.postFrameCall(() {
-      ref.read(customersPageNotifierProvider.notifier).fetchNextPage();
+      ref.read(customersPageNotifierProvider.notifier).fetchNextPage(_searchText);
     });
   }
 
@@ -101,6 +116,8 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
   Widget build(BuildContext context) {
 
     final CustomersPageState pageState = ref.watch(customersPageNotifierProvider);
+
+    _searchController = useTextEditingController();
 
     ref.listen<CustomersPageState>(
       customersPageNotifierProvider,
@@ -122,7 +139,9 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
             ),
             child: Row(
               children: [
-                const HBTextField(
+                HBTextField(
+                  controller: _searchController,
+                  onChanged: (String _) => _onSearchChanged,
                   icon: HBIcons.magnifyingGlass,
                   hint: 'Name',
                   maxWidth: 500.0
@@ -133,6 +152,11 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
                   onPressed: _onCreateCustomer,
                   icon: HBIcons.plus,
                   title: 'Neue/r Kund*in'
+                ),
+                const HBGap.md(),
+                HBButton.shrinkFill(
+                  onPressed: _onRefresh,
+                  icon: HBIcons.arrowPath
                 )
               ]
             )
@@ -149,14 +173,15 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
               ),
               controller: _scrollController,
               tableWidth: context.width - HBUIConstants.navigationRailWidth - context.rightPadding - 4.0 * HBSpacing.lg,
-              columnLength: 2,
-              fractions: const [ 0.1, 0.9 ],
-              titles: const [ 'ID', 'Name' ],
+              columnLength: 3,
+              fractions: const [ 0.3, 0.4, 0.3 ],
+              titles: const [ 'Name', 'Telefon / Mobil', 'Straße' ],
               items: List.generate(pageState.customers.length, (int index) {
                 final CustomerEntity customer = pageState.customers[index];
                 return [
-                  customer.id.toString(),
-                  '${customer.firstName} ${customer.lastName}'
+                  HBTableText(text: '${ customer.title != null ? '${ customer.title } ' : '' }${ customer.firstName } ${ customer.lastName }'),
+                  HBTableText(text: '${ customer.phone ?? '' }${ customer.phone != null && customer.mobile != null ? ' | ' : '' }${ customer.mobile ?? '' }'),
+                  HBTableText(text: '${ customer.address.street }, ${ customer.address.postalCode } ${ customer.address.city }')
                 ];
               }),
               text: _tableText
