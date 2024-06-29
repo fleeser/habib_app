@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_conditional/flutter_conditional.dart';
-import 'package:habib_app/core/common/widgets/hb_chip.dart';
 
+import 'package:habib_app/core/common/widgets/hb_chip.dart';
 import 'package:habib_app/core/res/theme/colors/hb_colors.dart';
 import 'package:habib_app/core/res/theme/spacing/hb_spacing.dart';
 import 'package:habib_app/core/res/theme/typography/hb_typography.dart';
@@ -90,7 +90,8 @@ class HBTable extends StatelessWidget {
                                 width: tableWidth * fractions[columnIndex],
                                 child: item
                               ),
-                              HBTableItemType.chip => item
+                              HBTableItemType.chip => item,
+                              HBTableItemType.radioIndicator => item
                             };
                           })
                         )
@@ -152,7 +153,8 @@ class HBTableTitle extends StatelessWidget {
 
 enum HBTableItemType {
   text,
-  chip
+  chip,
+  radioIndicator
 }
 
 class HBTableItem extends StatelessWidget {
@@ -172,23 +174,28 @@ class HBTableItem extends StatelessWidget {
 
 class HBTableText extends HBTableItem {
 
+  final void Function()? onPressed;
   final String text;
 
   const HBTableText({
     super.key,
+    this.onPressed,
     required this.text
   }) : super(type: HBTableItemType.text);
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: HBTypography.base.copyWith(
-        fontSize: 14.0,
-        fontWeight: FontWeight.w400,
-        color: HBColors.gray900
+    return GestureDetector(
+      onTap: onPressed,
+      child: Text(
+        text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: HBTypography.base.copyWith(
+          fontSize: 14.0,
+          fontWeight: FontWeight.w400,
+          color: HBColors.gray900
+        )
       )
     );
   }
@@ -206,5 +213,42 @@ class HBTableChip extends HBTableItem {
   @override
   Widget build(BuildContext context) {
     return chip;
+  }
+}
+
+class HBTableRadioIndicator extends HBTableItem {
+
+  final bool isSelected;
+
+  const HBTableRadioIndicator({ 
+    super.key,
+    required this.isSelected
+  }) : super(type: HBTableItemType.radioIndicator);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 20.0,
+      height: 20.0,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: HBColors.gray900,
+          width: 1.5
+        )
+      ),
+      child: Conditional.optionalSingle(
+        condition: isSelected,
+        widget: Container(
+          width: 12.0,
+          height: 12.0,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: HBColors.gray900
+          )
+        )
+      )
+    );
   }
 }

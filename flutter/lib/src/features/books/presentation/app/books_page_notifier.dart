@@ -1,63 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:habib_app/core/utils/constants/network_constants.dart';
-import 'package:habib_app/core/utils/result.dart';
+import 'package:habib_app/core/common/models/error_details.dart';
 import 'package:habib_app/src/features/books/domain/entities/book_entity.dart';
 import 'package:habib_app/src/features/books/domain/usecases/book_get_books_usecase.dart';
+import 'package:habib_app/core/utils/constants/network_constants.dart';
+import 'package:habib_app/core/utils/result.dart';
 
 part 'books_page_notifier.g.dart';
-
-enum BooksPageStatus {
-  initial,
-  loading,
-  success,
-  failure
-}
-
-class BooksPageState extends Equatable {
-  
-  final BooksPageStatus status;
-  final Exception? exception;
-  final List<BookEntity> books;
-  final bool hasReachedEnd;
-  final int currentPage;
-
-  const BooksPageState({
-    this.status = BooksPageStatus.initial,
-    this.exception,
-    this.books = const [],
-    this.hasReachedEnd = false,
-    this.currentPage = 1
-  });
-
-  BooksPageState copyWith({
-    BooksPageStatus? status,
-    Exception? exception,
-    List<BookEntity>? books,
-    bool? hasReachedEnd,
-    int? currentPage,
-    bool removeException = false,
-    bool removeBooks = false
-  }) {
-    return BooksPageState(
-      status: status ?? this.status,
-      exception: removeException ? null : exception ?? this.exception,
-      books: removeBooks ? [] : books ?? this.books,
-      hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
-      currentPage: currentPage ?? this.currentPage
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-    status,
-    exception,
-    books,
-    hasReachedEnd,
-    currentPage
-  ];
-}
 
 @riverpod
 class BooksPageNotifier extends _$BooksPageNotifier {
@@ -71,12 +21,11 @@ class BooksPageNotifier extends _$BooksPageNotifier {
   }
 
   Future<void> fetchNextPage(String searchText) async {
-    if (state.status == BooksPageStatus.loading) return;
-    if (state.hasReachedEnd) return;
-
+    if (state.isLoading || state.hasReachedEnd) return;
+    
     state = state.copyWith(
-      status: BooksPageStatus.loading,
-      removeException: true
+      isBooksLoading: true,
+      removeError: true
     );
 
     final BookGetBooksUsecaseParams params = BookGetBooksUsecaseParams(
@@ -88,26 +37,76 @@ class BooksPageNotifier extends _$BooksPageNotifier {
     result.fold(
       onSuccess: (List<BookEntity> books) {
         state = state.copyWith(
-          status: BooksPageStatus.success,
+          isBooksLoading: false,
           currentPage: books.isEmpty 
             ? state.currentPage 
             : state.currentPage + 1,
           books: List.of(state.books)..addAll(books),
-          hasReachedEnd: books.length < NetworkConstants.pageSize,
-          removeException: true
+          hasReachedEnd: books.length < NetworkConstants.pageSize
         );
-      }, 
-      onFailure: (Exception exception, StackTrace stackTrace) {
+      },
+      onFailure: (Object error, StackTrace stackTrace) {
         state = state.copyWith(
-          status: BooksPageStatus.failure,
-          exception: exception
+          isBooksLoading: false,
+          error: ErrorDetails(
+            error: error, 
+            stackTrace: stackTrace
+          )
         );
       }
     );
   }
-
+  
   Future<void> refresh(String searchText) async {
     state = const BooksPageState();
     await fetchNextPage(searchText);
   }
+}
+
+class BooksPageState extends Equatable {
+
+  final bool isBooksLoading;
+  final ErrorDetails? error;
+  final List<BookEntity> books;
+  final bool hasReachedEnd;
+  final int currentPage;
+
+  const BooksPageState({
+    this.isBooksLoading = false,
+    this.error,
+    this.books = const <BookEntity>[],
+    this.hasReachedEnd = false,
+    this.currentPage = 1
+  });
+
+  bool get hasError => error != null;
+  bool get isLoading => isBooksLoading;
+  bool get hasBooks => books.isNotEmpty;
+
+  BooksPageState copyWith({
+    bool? isBooksLoading = false,
+    ErrorDetails? error,
+    List<BookEntity>? books,
+    bool? hasReachedEnd,
+    int? currentPage,
+    bool removeError = false,
+    bool removeBooks = false
+  }) {
+    return BooksPageState(
+      isBooksLoading: isBooksLoading ?? this.isBooksLoading,
+      error: removeError ? null : error ?? this.error,
+      books: removeBooks ? const <BookEntity>[] : books ?? this.books,
+      hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
+      currentPage: currentPage ?? this.currentPage
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    isBooksLoading,
+    error,
+    books,
+    hasReachedEnd,
+    currentPage
+  ];
 }

@@ -6,7 +6,6 @@ We welcome community contributions! If you're thinking of contributing, thank yo
 
 We ask that all contributors abide by our [code of conduct](https://github.com/fleeser/habib_app/blob/production/code_of_conduct.md)
 
-
 ### Opening Issues
 
 We have templates for questions, features, or bug reports, please follow the directions in these templates, but generally:

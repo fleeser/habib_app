@@ -1,64 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-
+import 'package:habib_app/core/common/models/error_details.dart';
 import 'package:habib_app/src/features/customers/domain/entities/customer_entity.dart';
 import 'package:habib_app/src/features/customers/domain/usecases/customer_get_customers_usecase.dart';
 import 'package:habib_app/core/utils/constants/network_constants.dart';
 import 'package:habib_app/core/utils/result.dart';
 
 part 'customers_page_notifier.g.dart';
-
-enum CustomersPageStatus {
-  initial,
-  loading,
-  success,
-  failure
-}
-
-class CustomersPageState extends Equatable {
-  
-  final CustomersPageStatus status;
-  final Exception? exception;
-  final List<CustomerEntity> customers;
-  final bool hasReachedEnd;
-  final int currentPage;
-
-  const CustomersPageState({
-    this.status = CustomersPageStatus.initial,
-    this.exception,
-    this.customers = const [],
-    this.hasReachedEnd = false,
-    this.currentPage = 1
-  });
-
-  CustomersPageState copyWith({
-    CustomersPageStatus? status,
-    Exception? exception,
-    List<CustomerEntity>? customers,
-    bool? hasReachedEnd,
-    int? currentPage,
-    bool removeException = false,
-    bool removeCustomers = false
-  }) {
-    return CustomersPageState(
-      status: status ?? this.status,
-      exception: removeException ? null : exception ?? this.exception,
-      customers: removeCustomers ? [] : customers ?? this.customers,
-      hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
-      currentPage: currentPage ?? this.currentPage
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-    status,
-    exception,
-    customers,
-    hasReachedEnd,
-    currentPage
-  ];
-}
 
 @riverpod
 class CustomersPageNotifier extends _$CustomersPageNotifier {
@@ -72,12 +21,11 @@ class CustomersPageNotifier extends _$CustomersPageNotifier {
   }
 
   Future<void> fetchNextPage(String searchText) async {
-    if (state.status == CustomersPageStatus.loading) return;
-    if (state.hasReachedEnd) return;
-
+    if (state.isLoading || state.hasReachedEnd) return;
+    
     state = state.copyWith(
-      status: CustomersPageStatus.loading,
-      removeException: true
+      isCustomersLoading: true,
+      removeError: true
     );
 
     final CustomerGetCustomersUsecaseParams params = CustomerGetCustomersUsecaseParams(
@@ -89,19 +37,21 @@ class CustomersPageNotifier extends _$CustomersPageNotifier {
     result.fold(
       onSuccess: (List<CustomerEntity> customers) {
         state = state.copyWith(
-          status: CustomersPageStatus.success,
+          isCustomersLoading: false,
           currentPage: customers.isEmpty 
             ? state.currentPage 
             : state.currentPage + 1,
           customers: List.of(state.customers)..addAll(customers),
-          hasReachedEnd: customers.length < NetworkConstants.pageSize,
-          removeException: true
+          hasReachedEnd: customers.length < NetworkConstants.pageSize
         );
-      }, 
-      onFailure: (Exception exception, StackTrace stackTrace) {
+      },
+      onFailure: (Object error, StackTrace stackTrace) {
         state = state.copyWith(
-          status: CustomersPageStatus.failure,
-          exception: exception
+          isCustomersLoading: false,
+          error: ErrorDetails(
+            error: error, 
+            stackTrace: stackTrace
+          )
         );
       }
     );
@@ -111,4 +61,52 @@ class CustomersPageNotifier extends _$CustomersPageNotifier {
     state = const CustomersPageState();
     await fetchNextPage(searchText);
   }
+}
+
+class CustomersPageState extends Equatable {
+
+  final bool isCustomersLoading;
+  final ErrorDetails? error;
+  final List<CustomerEntity> customers;
+  final bool hasReachedEnd;
+  final int currentPage;
+
+  const CustomersPageState({
+    this.isCustomersLoading = false,
+    this.error,
+    this.customers = const <CustomerEntity>[],
+    this.hasReachedEnd = false,
+    this.currentPage = 1
+  });
+
+  bool get hasError => error != null;
+  bool get isLoading => isCustomersLoading;
+  bool get hasCustomers => customers.isNotEmpty;
+
+  CustomersPageState copyWith({
+    bool? isCustomersLoading = false,
+    ErrorDetails? error,
+    List<CustomerEntity>? customers,
+    bool? hasReachedEnd,
+    int? currentPage,
+    bool removeError = false,
+    bool removeCustomers = false
+  }) {
+    return CustomersPageState(
+      isCustomersLoading: isCustomersLoading ?? this.isCustomersLoading,
+      error: removeError ? null : error ?? this.error,
+      customers: removeCustomers ? const <CustomerEntity>[] : customers ?? this.customers,
+      hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
+      currentPage: currentPage ?? this.currentPage
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    isCustomersLoading,
+    error,
+    customers,
+    hasReachedEnd,
+    currentPage
+  ];
 }

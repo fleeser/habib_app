@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:habib_app/core/common/widgets/hb_chip.dart';
 import 'package:habib_app/core/extensions/datetime_extension.dart';
+import 'package:habib_app/core/extensions/object_extension.dart';
+import 'package:habib_app/core/common/widgets/hb_chip.dart';
 import 'package:habib_app/core/common/widgets/hb_table.dart';
-import 'package:habib_app/core/extensions/exception_extension.dart';
 import 'package:habib_app/core/utils/enums/toast_type.dart';
 import 'package:habib_app/core/common/widgets/hb_app_bar.dart';
 import 'package:habib_app/core/common/widgets/hb_button.dart';
 import 'package:habib_app/core/common/widgets/hb_gap.dart';
 import 'package:habib_app/core/common/widgets/hb_scaffold.dart';
-import 'package:habib_app/core/common/widgets/sc_text_field.dart';
+import 'package:habib_app/core/common/widgets/hb_text_field.dart';
 import 'package:habib_app/core/extensions/context_extension.dart';
 import 'package:habib_app/core/res/hb_icons.dart';
 import 'package:habib_app/core/res/theme/spacing/hb_spacing.dart';
@@ -37,12 +37,12 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
   late TextEditingController _searchController;
 
   void _onPageStateUpdate(BorrowsPageState? _, BorrowsPageState next) {
-    if (next.exception != null) {
+    if (next.hasError) {
       CoreUtils.showToast(
         context, 
         type: ToastType.error, 
-        title: next.exception!.title(context), 
-        description: next.exception!.description(context)
+        title: next.error!.errorTitle, 
+        description: next.error!.errorDescription, 
       );
     }
   }
@@ -62,15 +62,15 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
 
   HBTableStatus get _tableStatus {
     final BorrowsPageState pageState = ref.read(borrowsPageNotifierProvider);
-    if (pageState.status == BorrowsPageStatus.success && pageState.borrows.isNotEmpty) return HBTableStatus.data;
-    if (pageState.status == BorrowsPageStatus.failure || (pageState.status == BorrowsPageStatus.success && pageState.borrows.isEmpty)) return HBTableStatus.text;
+    if (pageState.hasBorrows) return HBTableStatus.data;
+    if (pageState.hasError || !pageState.hasBorrows) return HBTableStatus.text;
     return HBTableStatus.loading;
   }
 
   String? get _tableText {
     final BorrowsPageState pageState = ref.read(borrowsPageNotifierProvider);
-    if (pageState.status == BorrowsPageStatus.success && pageState.borrows.isEmpty) return 'Keine Ausleihen gefunden.';
-    if (pageState.status == BorrowsPageStatus.failure) return 'Ein Fehler ist aufgetreten.';
+    if (!pageState.isLoading && !pageState.hasError && !pageState.hasBorrows) return 'Keine Ausleihen gefunden.';
+    if (pageState.hasError) return 'Ein Fehler ist aufgetreten.';
     return null;
   }
 
@@ -86,12 +86,21 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
     await const CreateBorrowRoute().push(context);
   }
 
-  Future<void> _onSearchChanged() async {
+  Future<void> _onSearchChanged(String _) async {
     await ref.read(borrowsPageNotifierProvider.notifier).refresh(_searchText);
   }
 
   Future<void> _onRefresh() async {
     await ref.read(borrowsPageNotifierProvider.notifier).refresh(_searchText);
+  }
+
+  Future<void> _onCustomerPressed(int customerId) async {
+    final bool? customerDeleted = await CustomerDetailsRoute(customerId: customerId).push(context);
+    if (customerDeleted ?? false) ref.read(borrowsPageNotifierProvider.notifier).refresh(_searchText);
+  }
+
+  Future<void> _onBookPressed(int bookId) async {
+    await BookDetailsRoute(bookId: bookId).push(context);
   }
 
   @override
@@ -143,7 +152,7 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
               children: [
                 HBTextField(
                   controller: _searchController,
-                  onChanged: (String _) => _onSearchChanged,
+                  onChanged: _onSearchChanged,
                   icon: HBIcons.magnifyingGlass,
                   hint: 'Buchtitel oder Kundenname',
                   maxWidth: 500.0
@@ -181,9 +190,15 @@ class _BorrowsPageState extends ConsumerState<BorrowsPage> {
               items: List.generate(pageState.borrows.length, (int index) {
                 final BorrowEntity borrow = pageState.borrows[index];
                 return [
-                  HBTableText(text: '${ borrow.customer.title != null ? '${ borrow.customer.title } ' : '' }${ borrow.customer.firstName } ${ borrow.customer.lastName }'),
-                  HBTableText(text: '${ borrow.book.title }${ borrow.book.edition != null ? ' (${ borrow.book.edition }. Auflage)' : '' }'),
-                  HBTableText(text: borrow.endDate.toHumanReadable()),
+                  HBTableText(
+                    onPressed: () => _onCustomerPressed(borrow.customer.id),
+                    text: '${ borrow.customer.title != null ? '${ borrow.customer.title } ' : '' }${ borrow.customer.firstName } ${ borrow.customer.lastName }'
+                  ),
+                  HBTableText(
+                    onPressed: () => _onBookPressed(borrow.book.id),
+                    text: '${ borrow.book.title }${ borrow.book.edition != null ? ' (${ borrow.book.edition }. Auflage)' : '' }'
+                  ),
+                  HBTableText(text: borrow.endDate.toHumanReadableDate()),
                   HBTableChip(
                     chip: HBChip(
                       text: borrow.status.title, 

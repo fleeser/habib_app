@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:habib_app/core/utils/enums/book_status.dart';
-import 'package:habib_app/src/features/books/domain/entities/author_entity.dart';
-import 'package:habib_app/src/features/books/domain/entities/category_entity.dart';
+import 'package:habib_app/src/features/books/domain/entities/book_author_entity.dart';
+import 'package:habib_app/src/features/books/domain/entities/book_category_entity.dart';
 
 class BookEntity extends Equatable {
 
@@ -11,8 +11,8 @@ class BookEntity extends Equatable {
   final String? isbn10;
   final String? isbn13;
   final int? edition;
-  final List<AuthorEntity>? authors;
-  final List<CategoryEntity>? categories;
+  final List<BookAuthorEntity>? authors;
+  final List<BookCategoryEntity>? categories;
   final BookStatus status;
 
   const BookEntity({

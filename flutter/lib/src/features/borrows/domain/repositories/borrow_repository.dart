@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:habib_app/src/features/borrows/domain/entities/borrow_details_entity.dart';
 import 'package:habib_app/src/features/borrows/domain/entities/borrow_entity.dart';
 import 'package:habib_app/src/features/borrows/data/repositories/borrow_repository_impl.dart';
 import 'package:habib_app/src/features/borrows/data/datasources/borrow_datasource.dart';
@@ -17,4 +18,17 @@ BorrowRepository borrowRepository(BorrowRepositoryRef ref) {
 abstract interface class BorrowRepository {
 
   ResultFuture<List<BorrowEntity>> getBorrows({ required String searchText, required int currentPage });
+
+  ResultFuture<BorrowDetailsEntity> getBorrow({ required int borrowId });
+
+  ResultFuture<int> createBorrow({
+    required Json borrowJson
+  });
+
+  ResultFuture<void> updateBorrow({
+    required int borrowId,
+    required Json borrowJson
+  });
+
+  ResultFuture<void> deleteBorrow({ required int borrowId });
 }

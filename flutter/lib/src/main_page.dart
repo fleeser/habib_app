@@ -23,8 +23,11 @@ class MainPage extends StatelessWidget {
       case HomeRoute.location: return 0;
       case CustomersRoute.location: return 1;
       case BooksRoute.location: return 2;
-      case BorrowsRoute.location: return 3;
-      case SettingsRoute.location: return 4;
+      case AuthorsRoute.location: return 3;
+      case PublishersRoute.location: return 4;
+      case CategoriesRoute.location: return 5;
+      case BorrowsRoute.location: return 6;
+      case SettingsRoute.location: return 7;
       default: throw Exception('Index for location not found: $location');
     }
   }
@@ -41,9 +44,18 @@ class MainPage extends StatelessWidget {
         const BooksRoute().go(context);
         break;
       case 3:
-        const BorrowsRoute().go(context);
+        const AuthorsRoute().go(context);
         break;
       case 4:
+        const PublishersRoute().go(context);
+        break;
+      case 5:
+        const CategoriesRoute().go(context);
+        break;
+      case 6:
+        const BorrowsRoute().go(context);
+        break;
+      case 7:
         const SettingsRoute().go(context);
         break;
       default: throw Exception('Could not navigate to index: $index');
@@ -70,6 +82,18 @@ class MainPage extends StatelessWidget {
               HBNavigationRailItem(
                 icon: HBIcons.bookOpen,
                 title: 'Bücher'
+              ),
+              HBNavigationRailItem(
+                icon: HBIcons.user,
+                title: 'Autoren'
+              ),
+              HBNavigationRailItem(
+                icon: HBIcons.home,
+                title: 'Verlage'
+              ),
+              HBNavigationRailItem(
+                icon: HBIcons.tag,
+                title: 'Kategorien'
               ),
               HBNavigationRailItem(
                 icon: HBIcons.clock,

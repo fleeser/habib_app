@@ -1,7 +1,7 @@
 import 'package:habib_app/core/utils/typedefs.dart';
-import 'package:habib_app/src/features/customers/domain/entities/address_entity.dart';
+import 'package:habib_app/src/features/customers/domain/entities/customer_address_entity.dart';
 
-class CustomerAddressDto extends AddressEntity {
+class CustomerAddressDto extends CustomerAddressEntity {
 
   const CustomerAddressDto({
     required super.id,

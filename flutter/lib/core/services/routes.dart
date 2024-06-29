@@ -2,8 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 
+import 'package:habib_app/src/features/home/presentation/pages/home_page.dart';
+import 'package:habib_app/src/features/categories/presentation/pages/categories_page.dart';
+import 'package:habib_app/src/features/categories/presentation/pages/category_details_page.dart';
+import 'package:habib_app/src/features/categories/presentation/pages/create_category_page.dart';
 import 'package:habib_app/core/common/widgets/hb_dialog.dart';
 import 'package:habib_app/core/error/error_page.dart';
+import 'package:habib_app/src/features/publishers/presentation/pages/create_publisher_page.dart';
+import 'package:habib_app/src/features/publishers/presentation/pages/publisher_details_page.dart';
+import 'package:habib_app/src/features/publishers/presentation/pages/publishers_page.dart';
+import 'package:habib_app/src/features/authors/presentation/pages/authors_page.dart';
+import 'package:habib_app/src/features/authors/presentation/pages/author_details_page.dart';
+import 'package:habib_app/src/features/authors/presentation/pages/create_author_page.dart';
 import 'package:habib_app/src/features/books/presentation/pages/book_details_page.dart';
 import 'package:habib_app/src/features/books/presentation/pages/books_page.dart';
 import 'package:habib_app/src/features/books/presentation/pages/create_book_page.dart';
@@ -13,7 +23,6 @@ import 'package:habib_app/src/features/borrows/presentation/pages/create_borrow_
 import 'package:habib_app/src/features/customers/presentation/pages/create_customer_page.dart';
 import 'package:habib_app/src/features/customers/presentation/pages/customer_details_page.dart';
 import 'package:habib_app/src/features/customers/presentation/pages/customers_page.dart';
-import 'package:habib_app/src/features/home/presentation/pages/home_page.dart';
 import 'package:habib_app/src/features/settings/presentation/pages/settings_page.dart';
 import 'package:habib_app/src/main_page.dart';
 
@@ -52,6 +61,9 @@ class SplashRoute extends GoRouteData {
     TypedGoRoute<HomeRoute>(path: HomeRoute.location),
     TypedGoRoute<CustomersRoute>(path: CustomersRoute.location),
     TypedGoRoute<BooksRoute>(path: BooksRoute.location),
+    TypedGoRoute<AuthorsRoute>(path: AuthorsRoute.location),
+    TypedGoRoute<PublishersRoute>(path: PublishersRoute.location),
+    TypedGoRoute<CategoriesRoute>(path: CategoriesRoute.location),
     TypedGoRoute<BorrowsRoute>(path: BorrowsRoute.location),
     TypedGoRoute<SettingsRoute>(path: SettingsRoute.location)
   ]
@@ -191,6 +203,168 @@ class BookDetailsRoute extends GoRouteData {
   }
 }
 
+class AuthorsRoute extends GoRouteData {
+
+  const AuthorsRoute();
+
+  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+
+  static const String location = '/authors';
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return NoTransitionPage(
+      key: state.pageKey,
+      child: const AuthorsPage()
+    );
+  }
+}
+
+@TypedGoRoute<CreateAuthorRoute>(path: CreateAuthorRoute.location)
+class CreateAuthorRoute extends GoRouteData {
+
+  const CreateAuthorRoute();
+
+  static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
+
+  static const String location = '/authors/new';
+
+  @override
+  Page<int> buildPage(BuildContext context, GoRouterState state) {
+    return HBDialogPage<int>(
+      builder: (BuildContext context) => const CreateAuthorPage()
+    );
+  }
+}
+
+@TypedGoRoute<AuthorDetailsRoute>(path: AuthorDetailsRoute.location)
+class AuthorDetailsRoute extends GoRouteData {
+
+  final int authorId;
+
+  const AuthorDetailsRoute({
+    required this.authorId
+  });
+
+  static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
+
+  static const String location = '/authors/:authorId';
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    final AuthorDetailsPageParams params = AuthorDetailsPageParams(authorId: authorId);
+    return AuthorDetailsPage(params: params);
+  }
+}
+
+class PublishersRoute extends GoRouteData {
+
+  const PublishersRoute();
+
+  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+
+  static const String location = '/publishers';
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return NoTransitionPage(
+      key: state.pageKey,
+      child: const PublishersPage()
+    );
+  }
+}
+
+@TypedGoRoute<CreatePublisherRoute>(path: CreatePublisherRoute.location)
+class CreatePublisherRoute extends GoRouteData {
+
+  const CreatePublisherRoute();
+
+  static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
+
+  static const String location = '/publishers/new';
+
+  @override
+  Page<int> buildPage(BuildContext context, GoRouterState state) {
+    return HBDialogPage<int>(
+      builder: (BuildContext context) => const CreatePublisherPage()
+    );
+  }
+}
+
+@TypedGoRoute<PublisherDetailsRoute>(path: PublisherDetailsRoute.location)
+class PublisherDetailsRoute extends GoRouteData {
+
+  final int publisherId;
+
+  const PublisherDetailsRoute({
+    required this.publisherId
+  });
+
+  static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
+
+  static const String location = '/publishers/:publisherId';
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    final PublisherDetailsPageParams params = PublisherDetailsPageParams(publisherId: publisherId);
+    return PublisherDetailsPage(params: params);
+  }
+}
+
+class CategoriesRoute extends GoRouteData {
+
+  const CategoriesRoute();
+
+  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+
+  static const String location = '/categories';
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return NoTransitionPage(
+      key: state.pageKey,
+      child: const CategoriesPage()
+    );
+  }
+}
+
+@TypedGoRoute<CreateCategoryRoute>(path: CreateCategoryRoute.location)
+class CreateCategoryRoute extends GoRouteData {
+
+  const CreateCategoryRoute();
+
+  static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
+
+  static const String location = '/categories/new';
+
+  @override
+  Page<int> buildPage(BuildContext context, GoRouterState state) {
+    return HBDialogPage<int>(
+      builder: (BuildContext context) => const CreateCategoryPage()
+    );
+  }
+}
+
+@TypedGoRoute<CategoryDetailsRoute>(path: CategoryDetailsRoute.location)
+class CategoryDetailsRoute extends GoRouteData {
+
+  final int categoryId;
+
+  const CategoryDetailsRoute({
+    required this.categoryId
+  });
+
+  static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
+
+  static const String location = '/categories/:categoryId';
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    final CategoryDetailsPageParams params = CategoryDetailsPageParams(categoryId: categoryId);
+    return CategoryDetailsPage(params: params);
+  }
+}
+
 class BorrowsRoute extends GoRouteData {
 
   const BorrowsRoute();
@@ -211,7 +385,9 @@ class BorrowsRoute extends GoRouteData {
 @TypedGoRoute<CreateBorrowRoute>(path: CreateBorrowRoute.location)
 class CreateBorrowRoute extends GoRouteData {
 
-  const CreateBorrowRoute();
+  final CreateBorrowPageParams? $extra;
+
+  const CreateBorrowRoute({ this.$extra });
 
   static final GlobalKey<NavigatorState> $navigatorKey = rootNavigatorKey;
 
@@ -220,7 +396,7 @@ class CreateBorrowRoute extends GoRouteData {
   @override
   Page<int> buildPage(BuildContext context, GoRouterState state) {
     return HBDialogPage<int>(
-      builder: (BuildContext context) => const CreateBorrowPage()
+      builder: (BuildContext context) => CreateBorrowPage(params: $extra)
     );
   }
 }

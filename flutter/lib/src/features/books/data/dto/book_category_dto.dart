@@ -1,7 +1,7 @@
 import 'package:habib_app/core/utils/typedefs.dart';
-import 'package:habib_app/src/features/books/domain/entities/category_entity.dart';
+import 'package:habib_app/src/features/books/domain/entities/book_category_entity.dart';
 
-class BookCategoryDto extends CategoryEntity {
+class BookCategoryDto extends BookCategoryEntity {
 
   const BookCategoryDto({
     required super.id,

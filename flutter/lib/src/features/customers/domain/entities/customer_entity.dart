@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:habib_app/src/features/customers/domain/entities/address_entity.dart';
+import 'package:habib_app/src/features/customers/domain/entities/customer_address_entity.dart';
 
 class CustomerEntity extends Equatable {
 
@@ -10,7 +10,7 @@ class CustomerEntity extends Equatable {
   final String? title;
   final String? phone;
   final String? mobile;
-  final AddressEntity address;
+  final CustomerAddressEntity address;
 
   const CustomerEntity({
     required this.id,

@@ -15,12 +15,14 @@ class HBButton extends StatelessWidget {
   final HBIcons? icon;
   final bool isShrinked;
   final bool isOutlined;
+  final double? maxWidth;
 
   const HBButton.fill({
     super.key,
     this.onPressed,
     this.title,
     this.icon,
+    this.maxWidth
   })  : isShrinked = false,
         isOutlined = false;
 
@@ -28,7 +30,8 @@ class HBButton extends StatelessWidget {
     super.key,
     this.onPressed,
     this.title,
-    this.icon
+    this.icon,
+    this.maxWidth
   })  : isShrinked = false,
         isOutlined = true;
 
@@ -38,7 +41,8 @@ class HBButton extends StatelessWidget {
     this.title,
     this.icon,
   })  : isShrinked = true,
-        isOutlined = false;
+        isOutlined = false,
+        maxWidth = null;
 
   const HBButton.shrinkOutline({
     super.key,
@@ -46,7 +50,8 @@ class HBButton extends StatelessWidget {
     this.title,
     this.icon
   })  : isShrinked = true,
-        isOutlined = true;
+        isOutlined = true,
+        maxWidth = null;
 
   @override
   Widget build(BuildContext context) {
@@ -55,59 +60,62 @@ class HBButton extends StatelessWidget {
       ? HBUIConstants.buttonShrinkedHeight
       : HBUIConstants.buttonHeight;
     
-    return SizedBox(
-      height: buttonHeight,
-      width: isShrinked
-        ? null
-        : double.infinity,
-      child: RawMaterialButton(
-        onPressed: onPressed,
-        fillColor: isOutlined
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
+      child: SizedBox(
+        height: buttonHeight,
+        width: isShrinked
           ? null
-          : HBColors.gray900,
-        padding: const EdgeInsets.symmetric(horizontal: HBSpacing.lg),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(HBUIConstants.defaultBorderRadius),
-          side: BorderSide(
-            color: isOutlined
-              ? HBColors.gray900
-              : Colors.transparent,
-            width: isOutlined
-              ? 1.5
-              : 0.0
-          )
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (icon != null) HBIcon(
-              icon: icon!, 
-              size: buttonHeight * 0.5,
+          : double.infinity,
+        child: RawMaterialButton(
+          onPressed: onPressed,
+          fillColor: isOutlined
+            ? null
+            : HBColors.gray900,
+          padding: const EdgeInsets.symmetric(horizontal: HBSpacing.lg),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(HBUIConstants.defaultBorderRadius),
+            side: BorderSide(
               color: isOutlined
                 ? HBColors.gray900
-                : HBColors.gray100
-            ),
-            if (icon != null && title != null) const HBGap.md(),
-            if (title != null) Flexible(
-              child: Text(
-                title!,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: HBTypography.base.copyWith(
-                  fontSize: isShrinked
-                    ? 14.0
-                    : 16.0,
-                  fontWeight: isShrinked
-                    ? FontWeight.w400
-                    : FontWeight.w600,
-                  color: isOutlined
-                    ? HBColors.gray900
-                    : HBColors.gray100
+                : Colors.transparent,
+              width: isOutlined
+                ? 1.5
+                : 0.0
+            )
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (icon != null) HBIcon(
+                icon: icon!, 
+                size: buttonHeight * 0.5,
+                color: isOutlined
+                  ? HBColors.gray900
+                  : HBColors.gray100
+              ),
+              if (icon != null && title != null) const HBGap.md(),
+              if (title != null) Flexible(
+                child: Text(
+                  title!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: HBTypography.base.copyWith(
+                    fontSize: isShrinked
+                      ? 14.0
+                      : 16.0,
+                    fontWeight: isShrinked
+                      ? FontWeight.w400
+                      : FontWeight.w600,
+                    color: isOutlined
+                      ? HBColors.gray900
+                      : HBColors.gray100
+                  )
                 )
               )
-            )
-          ]
+            ]
+          )
         )
       )
     );

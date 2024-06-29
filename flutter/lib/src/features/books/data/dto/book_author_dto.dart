@@ -1,7 +1,7 @@
 import 'package:habib_app/core/utils/typedefs.dart';
-import 'package:habib_app/src/features/books/domain/entities/author_entity.dart';
+import 'package:habib_app/src/features/books/domain/entities/book_author_entity.dart';
 
-class BookAuthorDto extends AuthorEntity {
+class BookAuthorDto extends BookAuthorEntity {
 
   const BookAuthorDto({
     required super.id,

@@ -125,25 +125,29 @@ class HBDialogActionButton {
 class HBDialogSection extends StatelessWidget {
 
   final String title;
+  final bool isFirstSection;
 
   const HBDialogSection({
     super.key,
-    required this.title
+    required this.title,
+    this.isFirstSection = false
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: HBSpacing.xl,
-        bottom: HBSpacing.lg
+      padding: EdgeInsets.only(
+        top: isFirstSection 
+          ? HBSpacing.lg 
+          : HBSpacing.xxl,
+        bottom: HBSpacing.xl
       ),
       child: Text(
         title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: HBTypography.base.copyWith(
-          fontSize: 16.0,
+          fontSize: 20.0,
           fontWeight: FontWeight.w600,
           color: HBColors.gray900
         )

@@ -97,10 +97,10 @@ class HBAppBarButton extends StatelessWidget {
         onPressed: onPressed,
         enableFeedback: !isLoading && isEnabled,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(HBUIConstants.appBarButtonSize / 2.0)),
-        fillColor: HBColors.gray300,
+        fillColor: HBColors.gray900,
         child: HBIcon(
           icon: icon!,
-          color: HBColors.gray900,
+          color: HBColors.gray100,
           size: HBUIConstants.appBarButtonSize / 2.0
         )
       )

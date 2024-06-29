@@ -1,63 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:habib_app/core/common/models/error_details.dart';
+import 'package:habib_app/src/features/borrows/domain/entities/borrow_entity.dart';
 import 'package:habib_app/src/features/borrows/domain/usecases/borrow_get_borrows_usecase.dart';
 import 'package:habib_app/core/utils/constants/network_constants.dart';
 import 'package:habib_app/core/utils/result.dart';
-import 'package:habib_app/src/features/borrows/domain/entities/borrow_entity.dart';
 
 part 'borrows_page_notifier.g.dart';
-
-enum BorrowsPageStatus {
-  initial,
-  loading,
-  success,
-  failure
-}
-
-class BorrowsPageState extends Equatable {
-  
-  final BorrowsPageStatus status;
-  final Exception? exception;
-  final List<BorrowEntity> borrows;
-  final bool hasReachedEnd;
-  final int currentPage;
-
-  const BorrowsPageState({
-    this.status = BorrowsPageStatus.initial,
-    this.exception,
-    this.borrows = const [],
-    this.hasReachedEnd = false,
-    this.currentPage = 1
-  });
-
-  BorrowsPageState copyWith({
-    BorrowsPageStatus? status,
-    Exception? exception,
-    List<BorrowEntity>? borrows,
-    bool? hasReachedEnd,
-    int? currentPage,
-    bool removeException = false,
-    bool removeBorrows = false
-  }) {
-    return BorrowsPageState(
-      status: status ?? this.status,
-      exception: removeException ? null : exception ?? this.exception,
-      borrows: removeBorrows ? [] : borrows ?? this.borrows,
-      hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
-      currentPage: currentPage ?? this.currentPage
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-    status,
-    exception,
-    borrows,
-    hasReachedEnd,
-    currentPage
-  ];
-}
 
 @riverpod
 class BorrowsPageNotifier extends _$BorrowsPageNotifier {
@@ -71,12 +21,11 @@ class BorrowsPageNotifier extends _$BorrowsPageNotifier {
   }
 
   Future<void> fetchNextPage(String searchText) async {
-    if (state.status == BorrowsPageStatus.loading) return;
-    if (state.hasReachedEnd) return;
-
+    if (state.isLoading || state.hasReachedEnd) return;
+    
     state = state.copyWith(
-      status: BorrowsPageStatus.loading,
-      removeException: true
+      isBorrowsLoading: true,
+      removeError: true
     );
 
     final BorrowGetBorrowsUsecaseParams params = BorrowGetBorrowsUsecaseParams(
@@ -88,26 +37,76 @@ class BorrowsPageNotifier extends _$BorrowsPageNotifier {
     result.fold(
       onSuccess: (List<BorrowEntity> borrows) {
         state = state.copyWith(
-          status: BorrowsPageStatus.success,
+          isBorrowsLoading: false,
           currentPage: borrows.isEmpty 
             ? state.currentPage 
             : state.currentPage + 1,
           borrows: List.of(state.borrows)..addAll(borrows),
-          hasReachedEnd: borrows.length < NetworkConstants.pageSize,
-          removeException: true
+          hasReachedEnd: borrows.length < NetworkConstants.pageSize
         );
-      }, 
-      onFailure: (Exception exception, StackTrace stackTrace) {
+      },
+      onFailure: (Object error, StackTrace stackTrace) {
         state = state.copyWith(
-          status: BorrowsPageStatus.failure,
-          exception: exception
+          isBorrowsLoading: false,
+          error: ErrorDetails(
+            error: error, 
+            stackTrace: stackTrace
+          )
         );
       }
     );
   }
-
+  
   Future<void> refresh(String searchText) async {
     state = const BorrowsPageState();
     await fetchNextPage(searchText);
   }
+}
+
+class BorrowsPageState extends Equatable {
+
+  final bool isBorrowsLoading;
+  final ErrorDetails? error;
+  final List<BorrowEntity> borrows;
+  final bool hasReachedEnd;
+  final int currentPage;
+
+  const BorrowsPageState({
+    this.isBorrowsLoading = false,
+    this.error,
+    this.borrows = const <BorrowEntity>[],
+    this.hasReachedEnd = false,
+    this.currentPage = 1
+  });
+
+  bool get hasError => error != null;
+  bool get isLoading => isBorrowsLoading;
+  bool get hasBorrows => borrows.isNotEmpty;
+
+  BorrowsPageState copyWith({
+    bool? isBorrowsLoading = false,
+    ErrorDetails? error,
+    List<BorrowEntity>? borrows,
+    bool? hasReachedEnd,
+    int? currentPage,
+    bool removeError = false,
+    bool removeBorrows = false
+  }) {
+    return BorrowsPageState(
+      isBorrowsLoading: isBorrowsLoading ?? this.isBorrowsLoading,
+      error: removeError ? null : error ?? this.error,
+      borrows: removeBorrows ? const <BorrowEntity>[] : borrows ?? this.borrows,
+      hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
+      currentPage: currentPage ?? this.currentPage
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    isBorrowsLoading,
+    error,
+    borrows,
+    hasReachedEnd,
+    currentPage
+  ];
 }

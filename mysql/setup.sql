@@ -55,10 +55,9 @@ CREATE TABLE books (
     isbn_13             nchar(13),
     edition             SMALLINT,
     publish_date        DATE,
-    publisher_id        MEDIUMINT NOT NULL,
     bought              SMALLINT,
+    received_at         DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT pk_book_id PRIMARY KEY (id),
-    CONSTRAINT fk_books_publisher_id FOREIGN KEY (publisher_id) REFERENCES publishers(id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT book_bought_0_or_1 CHECK (bought IN (0, 1))
 );
 
@@ -101,4 +100,14 @@ CREATE TABLE book_categories (
     CONSTRAINT pk_book_categories_book_id_category_id PRIMARY KEY (book_id, category_id),
     CONSTRAINT fk_book_categories_book_id FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_book_categories_category_id FOREIGN KEY (category_id) REFERENCES categories(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE book_publishers (
+    book_id             MEDIUMINT NOT NULL,
+    publisher_id        MEDIUMINT NOT NULL,
+    created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at          DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT pk_book_publishers_book_id_publisher_id PRIMARY KEY (book_id, publisher_id),
+    CONSTRAINT fk_book_publishers_book_id FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_book_publishers_publisher_id FOREIGN KEY (publisher_id) REFERENCES publishers(id) ON UPDATE CASCADE ON DELETE CASCADE
 );

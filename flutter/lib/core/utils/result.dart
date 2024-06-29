@@ -1,18 +1,20 @@
+import 'dart:async';
+
 sealed class Result<S> {
 
   const Result();
 
   factory Result.success(S value) => Success<S>(value);
-  factory Result.failure(Exception exception, { StackTrace? stackTrace }) => Failure<S>(exception, stackTrace: stackTrace);
+  factory Result.failure(Object error, { StackTrace? stackTrace }) => Failure<S>(error, stackTrace: stackTrace);
 
-  R fold<R>({
-    required R Function(S value) onSuccess, 
-    required R Function(Exception exception, StackTrace stackTrace) onFailure
-  }) {
+  FutureOr<R> fold<R>({
+    required FutureOr<R> Function(S value) onSuccess, 
+    required FutureOr<R> Function(Object error, StackTrace stackTrace) onFailure
+  }) async {
     if (this is Success) {
-      return onSuccess((this as Success<S>).value);
+      return await onSuccess((this as Success<S>).value);
     } else if (this is Failure) {
-      return onFailure((this as Failure<S>).exception, (this as Failure<S>).stackTrace);
+      return await onFailure((this as Failure<S>).error, (this as Failure<S>).stackTrace);
     } else {
       throw Exception('Unexpected Result type');
     }
@@ -27,9 +29,9 @@ final class Success<S> extends Result<S> {
 
 final class Failure<S> extends Result<S> {
 
-  final Exception exception;
+  final Object error;
   final StackTrace stackTrace;
 
-  Failure(this.exception, { StackTrace? stackTrace })
+  Failure(this.error, { StackTrace? stackTrace })
     : stackTrace = stackTrace ?? StackTrace.current;
 }

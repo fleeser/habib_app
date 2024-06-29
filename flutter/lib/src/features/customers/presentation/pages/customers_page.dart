@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:habib_app/core/extensions/object_extension.dart';
 import 'package:habib_app/core/common/widgets/hb_table.dart';
-import 'package:habib_app/core/extensions/exception_extension.dart';
 import 'package:habib_app/core/common/widgets/hb_app_bar.dart';
 import 'package:habib_app/core/common/widgets/hb_button.dart';
 import 'package:habib_app/core/common/widgets/hb_gap.dart';
 import 'package:habib_app/core/common/widgets/hb_scaffold.dart';
-import 'package:habib_app/core/common/widgets/sc_text_field.dart';
+import 'package:habib_app/core/common/widgets/hb_text_field.dart';
 import 'package:habib_app/core/extensions/context_extension.dart';
 import 'package:habib_app/core/res/hb_icons.dart';
 import 'package:habib_app/core/res/theme/spacing/hb_spacing.dart';
@@ -35,12 +35,12 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
   late TextEditingController _searchController;
 
   void _onPageStateUpdate(CustomersPageState? _, CustomersPageState next) {
-    if (next.exception != null) {
+    if (next.hasError) {
       CoreUtils.showToast(
         context, 
         type: ToastType.error, 
-        title: next.exception!.title(context), 
-        description: next.exception!.description(context)
+        title: next.error!.errorTitle, 
+        description: next.error!.errorDescription, 
       );
     }
   }
@@ -60,15 +60,15 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
 
   HBTableStatus get _tableStatus {
     final CustomersPageState pageState = ref.read(customersPageNotifierProvider);
-    if (pageState.status == CustomersPageStatus.success && pageState.customers.isNotEmpty) return HBTableStatus.data;
-    if (pageState.status == CustomersPageStatus.failure || (pageState.status == CustomersPageStatus.success && pageState.customers.isEmpty)) return HBTableStatus.text;
+    if (pageState.hasCustomers) return HBTableStatus.data;
+    if (pageState.hasError || !pageState.hasCustomers) return HBTableStatus.text;
     return HBTableStatus.loading;
   }
 
   String? get _tableText {
     final CustomersPageState pageState = ref.read(customersPageNotifierProvider);
-    if (pageState.status == CustomersPageStatus.success && pageState.customers.isEmpty) return 'Keine Kunden gefunden.';
-    if (pageState.status == CustomersPageStatus.failure) return 'Ein Fehler ist aufgetreten.';
+    if (!pageState.isLoading && !pageState.hasError && !pageState.hasCustomers) return 'Keine Kund*innen gefunden.';
+    if (pageState.hasError) return 'Ein Fehler ist aufgetreten.';
     return null;
   }
 
@@ -77,14 +77,15 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
   }
 
   Future<void> _onCustomerPressed(int customerId) async {
-    await CustomerDetailsRoute(customerId: customerId).push(context);
+    final bool? customerDeleted = await CustomerDetailsRoute(customerId: customerId).push(context);
+    if (customerDeleted ?? false) ref.read(customersPageNotifierProvider.notifier).refresh(_searchText);
   }
 
   Future<void> _onCreateCustomer() async {
     await const CreateCustomerRoute().push(context);
   }
 
-  Future<void> _onSearchChanged() async {
+  Future<void> _onSearchChanged(String _) async {
     await ref.read(customersPageNotifierProvider.notifier).refresh(_searchText);
   }
 
@@ -141,7 +142,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
               children: [
                 HBTextField(
                   controller: _searchController,
-                  onChanged: (String _) => _onSearchChanged,
+                  onChanged: _onSearchChanged,
                   icon: HBIcons.magnifyingGlass,
                   hint: 'Name',
                   maxWidth: 500.0
